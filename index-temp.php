@@ -126,11 +126,11 @@
     <div class="container main">
         <div class="row">
             
-            <form role="form" method="post" action="">
+            <form role="form" method="post" action="index.php" onsubmit="return validateData();">
             <div class="col-sm-2">
                 Street:<span class="required">*</span>
                 <div class="form-group">
-                    <input type="text" class="form-control input-sm" placeholder="Enter street address" id="address">
+                    <input type="text" class="form-control input-sm" placeholder="Enter street address" id="address" name="StreetAddress">
                 </div>
                 <p class="requiredField" id="addressMissing">Please enter the street address.</p>
             </div>
@@ -138,7 +138,7 @@
             <div class="col-md-2">
                 City:<span class="required">*</span>
                 <div class="form-group">
-                    <input type="text" class="form-control input-sm" placeholder="Enter the city" id="city">
+                    <input type="text" class="form-control input-sm" placeholder="Enter the city" id="city" name="City">
                 </div>
                 <p class="requiredField" id="cityMissing">Please enter the city.</p>
             </div>
@@ -146,7 +146,7 @@
             <div class="col-md-2">
                 State:<span class="required">*</span>
                 <div class="form-group">
-                    <select class="form-control input-sm" id="state">
+                    <select class="form-control input-sm" id="state" name="State">
                     </select>
                 </div>
                 <p class="requiredField" id="stateMissing">Please select a state.</p>
@@ -168,7 +168,7 @@
          
             <div class="col-md-3"><span class="pull-right">
                 <div class="form-group">
-                    <button type="button" class="btn btn-primary btn-sm"  style="float:left;" aria-label="Left Align" onclick="validateData()">
+                    <button type="submit" name="submit" class="btn btn-primary btn-sm"  style="float:left;" aria-label="Left Align" >
                         <span class="glyphicon glyphicon-search"></span>
                         Search
                     </button>
@@ -183,7 +183,146 @@
             </form>
         </div>
     </div>
+        
+        
+    <?php if(isset($_POST["submit"])): ?>
     
+    <?php
+
+        $urlA = rawurlencode("https://maps.googleapis.com/maps/api/geocode/xml?");
+        $urlB = urlencode("address=".$_POST["StreetAddress"]. "," .  $_POST["City"] . "," . $_POST["State"] . "&key=AIzaSyBTsfwGZIxBYDk-SpEta0CLquAVlUkNRPg");
+        $google_url = $urlA . $urlB;                  
+                          
+        $xml = simplexml_load_file($google_url) or die("url not loading"); 
+        //echo "googleurl ->" . $google_url . "<br>"; 
+        //print_r($xml);
+
+
+
+        if($xml->result){
+            $lat = (string) $xml->result->geometry->location->lat;
+            $long = (string) $xml->result->geometry->location->lng; 
+        }
+        else{
+            echo '<script language="javascript">';
+            echo 'alert("Please enter a valid address")';
+            echo '</script>';
+            return;
+        }
+            
+        //echo "lat". $lat;
+        //echo "long" . $long;
+
+        if($_POST["unit"] == "Fahrenheit"){
+            $uv = "us";
+            $unitOfTemperature = "F";
+            $unitOfWindSpeed = "mph";
+            $unitOfVisibilty = "mi";
+        }
+        else{
+            $uv = "si";
+            $unitOfTemperature = "C";
+            $unitOfWindSpeed="m/s";
+            $unitOfVisibilty ="km";
+
+        }
+
+        $forecastAPIKEY = "f936f6c35c37265a692691ccaacc8219";
+        $urla = "https://api.forecast.io/forecast/$forecastAPIKEY/$lat,$long?";
+            
+        $urlb = "units=$uv&exclude=flags";        
+        $forecast_url = $urla . $urlb;
+        //echo "<br><br>URL: " . $forecast_url;
+        $json = file_get_contents($forecast_url);
+
+        //echo "<br><br>JSON: ";
+        //var_dump($json);
+        $obj = json_decode($json);
+        
+        echo "<br><br>";
+        echo "<table border=1.5px rules=none align=center id=\"resultTable\">";
+        
+        $timeZone=$obj->{"timezone"};
+        date_default_timezone_set($timeZone);
+
+        $summary = $obj->currently->{"summary"};
+        echo "<tr><td colspan=2 class=\"center\"><h2 style=\"padding:0; margin:0;\">$summary</h2></td><tr>";
+
+        $temperature = $obj->currently->{"temperature"};
+        echo "<tr><td colspan=2 class=\"center\"><h2 style=\"padding:0; margin:0;\">".round($temperature)."&deg; $unitOfTemperature</h2></td><tr>";
+
+        $icon = $obj->currently->{"icon"};
+        switch($icon){
+            case "clear-day": $image = "clear";break;
+            case "clear-night": $image = "clear_night";break;
+            case "rain": $image = "rain"; break;
+            case "snow": $image = "snow"; break;
+            case "sleet": $image = "sleet"; break;
+            case "wind": $image = "wind"; break;
+            case "fog": $image = "fog"; break;
+            case "cloudy": $image = "cloudy"; break;
+            case "partly-cloudy-day": $image = "cloud_day"; break;
+            case "partly-cloudy-night": $image = "cloud_night"; break;
+        }
+
+        echo "<tr><td colspan=2 class=\"center\"><img src=\"http://cs-server.usc.edu:45678/hw/hw6/images/$image.png\" alt=\"$icon\" title=\"$icon\" width=\"80px\" height=\"80px\" /></td></tr>";
+        
+        $precipitation = $obj->currently->{"precipIntensity"};
+        if($uv = "si"){
+            $precipitation=$precipitation/25.4;
+        }
+
+        
+        if(0 <= $precipitation && $precipitation < 0.002)
+        {
+            $temp="None";
+        }
+        else  if(0.002 <= $precipitation && $precipitation < 0.017)
+        {
+            $temp="Very Light";
+        }
+        
+        else  if(0.017 <= $precipitation && $precipitation < 0.1){
+            $temp="Light";
+        }
+        else  if(0.1 <= $precipitation && $precipitation < 0.4){
+            $temp="Moderate";
+        }
+        else  if(0.4 <= $precipitation){
+            $temp="Heavy";
+        }
+
+        echo "<tr><td>Precipitation: </td><td>$temp</td><tr>";
+        
+        $chanceOfRain = intval($obj->currently->{"precipProbability"})*100 . "%";
+        echo "<tr><td>Chance Of Rain: </td><td>$chanceOfRain</td><tr>";
+
+        $windSpeed = $obj->currently->{"windSpeed"};
+        echo "<tr><td>WindSpeed: </td><td>".round($windSpeed). " $unitOfWindSpeed</td><tr>";
+
+        $dewPoint = $obj->currently->{"dewPoint"};
+        echo "<tr><td>Dew Point: </td><td>".round($dewPoint)."&deg; $unitOfTemperature</td><tr>";
+        
+        $humidity = ($obj->currently->{"humidity"})*100 . "%";
+        echo "<tr><td>Humidity: </td><td>$humidity</td><tr>";
+
+        $visibility = $obj->currently->{"visibility"};
+        echo "<tr><td>Visibility: </td><td>".round($visibility). " $unitOfVisibilty</td><tr>";
+
+        $sunriseTime=$obj->{"daily"}->{"data"}[0]->{"sunriseTime"};
+        echo "<tr><td>Sunrise: </td><td>".date("h:i A",$sunriseTime)."<br></td></tr>";
+        
+        $sunsetTime=$obj->{"daily"}->{"data"}[0]->{"sunsetTime"};
+        echo "<tr><td>Sunset: </td><td>".date("h:i A",$sunsetTime)."<br></td></tr>";
+
+
+
+        echo "</table>";
+        
+    ?>
+    
+    <?php endif; ?>
+
     
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
