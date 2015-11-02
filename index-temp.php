@@ -25,6 +25,10 @@
             padding-top: 10px;
         }
         
+        .result{
+            padding-top: 10px;
+        }
+        
         h2#title{
             padding-top: 0;
             margin-top: 0;
@@ -44,6 +48,22 @@
             font-size:85%;   
         }
         
+        .nav-tabs li a{
+            background-color:#EEEEEE;
+            margin-right: 2px;
+        }
+        .tab-content{
+            background-color:#303136;
+            color:#fff;
+            padding:2px
+        }
+        
+        .nav-tabs > li.active > a,
+            .nav-tabs > li.active > a:focus,
+            .nav-tabs > li.active > a:hover{
+            background-color: #3071A9 !important;
+            color: white;
+        }
     </style>
     
     
@@ -127,6 +147,7 @@
         <div class="row">
             
             <form role="form" method="post" action="index.php" onsubmit="return validateData();">
+                
             <div class="col-sm-2">
                 Street:<span class="required">*</span>
                 <div class="form-group">
@@ -162,8 +183,8 @@
                    <label class="radio-inline input-sm"><input type="radio" name="unit" value="Fahrenheit" id="Fahrenheit" checked>Fahrenheit</label>
                    <label class="radio-inline input-sm"><input type="radio" name="unit" value="Celsius" id="Celsius" >Degree</label>
     
+                </div>
             </div>
-        </div>
             
          
             <div class="col-md-3"><span class="pull-right">
@@ -181,9 +202,33 @@
             </div>
                 
             </form>
+                
         </div>
     </div>
-        
+    
+    <div class="container result">  
+    <ul class="nav nav-tabs">
+        <li><a data-toggle="tab" href="#home">Right Now</a></li>
+        <li><a data-toggle="tab" href="#menu1">Next 24 Hours</a></li>
+        <li><a data-toggle="tab" href="#menu2">Next 7 Days</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            <h3>HOME</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.             </p>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <h3>Menu 1</h3>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            <h3>Menu 2</h3>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+        </div>
+    </div>
+    
+    </div>  
         
     <?php if(isset($_POST["submit"])): ?>
     
