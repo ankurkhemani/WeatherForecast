@@ -22,7 +22,7 @@
         .main{
             background: rgba(0,0,0,0.5);
             color: white;
-            padding-top: 10px;
+            padding: 10px;
         }
         
         .result{
@@ -53,8 +53,8 @@
             margin-right: 2px;
         }
         .tab-content{
-            background-color:#303136;
-            color:#fff;
+            background-color:#F27E7F;
+            color:#000;
             padding:2px
         }
         
@@ -64,6 +64,14 @@
             background-color: #3071A9 !important;
             color: white;
         }
+        
+        .table{
+            background-color:#EEEEEE;
+            padding:0;
+            margin:0;
+        }
+        
+        
     </style>
     
     
@@ -136,19 +144,19 @@
 </head>
 
 <body>
-    
+    <div class="container">
     <div class="container label">
         
         <h2 id="title"> Forecast Search</h2>
     
     </div>
             
-    <div class="container main">
+    <div class="main">
         <div class="row">
             
             <form role="form" method="post" action="index.php" onsubmit="return validateData();">
                 
-            <div class="col-sm-2">
+            <div class="col-md-2">
                 Street:<span class="required">*</span>
                 <div class="form-group">
                     <input type="text" class="form-control input-sm" placeholder="Enter street address" id="address" name="StreetAddress">
@@ -205,31 +213,66 @@
                 
         </div>
     </div>
+        
+    <hr>    
     
-    <div class="container result">  
+    <div class="result">  
     <ul class="nav nav-tabs">
-        <li><a data-toggle="tab" href="#home">Right Now</a></li>
+        <li class="active"><a data-toggle="tab" href="#home">Right Now</a></li>
         <li><a data-toggle="tab" href="#menu1">Next 24 Hours</a></li>
         <li><a data-toggle="tab" href="#menu2">Next 7 Days</a></li>
     </ul>
 
     <div class="tab-content">
         <div id="home" class="tab-pane fade in active">
-            <h3>HOME</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.             </p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    Image
+                                </div>
+                                <div class="col-md-6">
+                                    Header data
+                                </div>
+                            </div>
+                            <table class="table">
+                            <tbody>
+                              <tr>
+                                <td>Ankur</td>
+                                <td>Khemani</td>
+                              </tr>
+                              <tr class="danger">
+                                <td>Ankur</td>
+                                <td>Khemani</td>
+                              </tr>
+                              <tr>
+                                <td>Ankur</td>
+                                <td>Khemani</td>
+                              </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        <div class="col-md-6">
+                            HI
+                        </div>
+                    </div>
         </div>
+        
         <div id="menu1" class="tab-pane fade">
             <h3>Menu 1</h3>
-            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <p>This is Menu 1</p>
         </div>
         <div id="menu2" class="tab-pane fade">
             <h3>Menu 2</h3>
-            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+            <p>This is Menu 2</p>
         </div>
     </div>
     
     </div>  
+    
         
+    </div>
+            
     <?php if(isset($_POST["submit"])): ?>
     
     <?php
