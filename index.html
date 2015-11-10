@@ -137,34 +137,34 @@
     switch(icon){
             
             case "clear-day": 
-                $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/clear.png"  alt=icon  title=summary style="width:80px;height:80px;" align="center" ></img>');
+                $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/clear.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;" ></img>');
                 break;
             case "clear-night": 
-                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png"  alt=icon  title=summary style="width:80px;height:80px;" align="center" ></img>');
+                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;" ></img>');
                 break;
             case "rain": 
-                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/rain.png"  alt=icon  title=summary style="width:80px;height:80px;" align="center"></img>');
+                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/rain.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;"></img>');
                 break;
             case "snow": 
-                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/snow.png"  alt=icon  title=summary style="width:80px;height:80px;"  align="center"></img>');
+                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/snow.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;"></img>');
                 break;
             case "sleet": 
-                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png"  alt=icon  title=summary style="width:80px;height:80px;"  align="center"></img>');
+                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;"></img>');
                 break;
             case "wind": 
-                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/wind.png"  alt=icon  title=summary style="width:80px;height:80px;" align="center" ></img>');
+                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/wind.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;" ></img>');
                 break;
             case "fog": 
-                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/fog.png"  alt=icon  title=summary style="width:80px;height:80px;" align="center"></img>');
+                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/fog.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;"></img>');
                 break;
             case "cloudy": 
-                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png"  alt=icon  title=summary style="width:80px;height:80px;"  align="center"></img>');
+                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;"></img>');
                 break;
             case "partly-cloudy-day": 
-                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png"  alt=icon  title=summary style="width:80px;height:80px;" align="center" ></img>');
+                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;" ></img>');
                 break;
             case "partly-cloudy-night": 
-                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png"  alt=icon  title=summary style="width:80px;height:80px;" align="center"></img>');
+                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png"  alt=icon  title=summary style="width:150px;height:40%;margin:auto;" ></img>');
                 break;
                 
                 
@@ -318,27 +318,30 @@ switch(icon){
         }
         
         #footer {
- 	 	 width:100%;
-                }
+ 	 	    width:100%;
+        }
         
         #myTab li a{
-         background-color:#EDEDED; 
-         color: #2F70A8;
-            
+            background-color:#EDEDED; 
+            color: #2F70A8;
+        
         }
         
         #myTab li.active a{
-         background-color: #2F70A8;  
-         color: #EDEDED;
+            background-color: #2F70A8;  
+            color: #EDEDED;
             
         }
         
         .topHeader {
-         background-color:#F27E7F; 
+            background-color:#F27E7F; 
             padding:20px;
-          margin:0px auto;
-            
-           
+            margin:0px auto;
+        }
+        
+        .center {
+            margin: auto;
+            width: 150px;
         }
         
           
@@ -356,15 +359,41 @@ switch(icon){
     
 }
         .table{
-         background: #F1DDDD;
-         margin:0;
-         padding:0;
-            
+             background: #F1DDDD;
+             margin:0;
+             padding:0;  
+        }
+       
+        
+        /* To make columns of equal height */
+        .row-eq-height {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display:         flex;
+            padding:0;
+            margin:0;
         }
         
-       
+        .result{
+            padding-top: 10px;
+            padding-bottom: 20px;
+
+        }
         
-       
+   .row.no-pad {
+  margin-right:0;
+  margin-left:0;
+}
+.row.no-pad > [class*='col-'] {
+  padding-right:0;
+  padding-left:0;
+}
+
+
+
+
+        
     </style>
     
     
@@ -441,7 +470,7 @@ switch(icon){
             </div>
         </form>         
         </div>
-            <br/>
+
         <div class="row">
          <div class="col-md-2"></div>   
         <div class="col-md-2"></div> 
@@ -456,7 +485,7 @@ switch(icon){
  
       <hr>
     
-    <div class="" id="result" style="display:none;">
+    <div class="result" id="result" style="display:none;">
 
       <ul class="nav nav-tabs " id="myTab">
         <li class="active"><a data-toggle="tab" href="#home">Right Now</a></li>
@@ -467,15 +496,14 @@ switch(icon){
       <div class="tab-content">
           
            <div id="home" class="tab-pane fade in active">
-                    HI
-                   <div class="row">
-                       
-                        <div class="col-md-6" style="padding:0px;">
-                            <div class="row">
-                                <div class="col-md-6 topHeader" id="weatherIcon">
+                   <div class="row no-pad" >
+                
+                        <div class="col-md-6">
+                            <div class="row row-eq-height topHeader">
+                                <div class="col-md-6 center" id="weatherIcon">
                                 </div>
                                        
-                                <div class="col-md-6 topHeader" id="weatherData">
+                                <div class="col-md-6" id="weatherData">
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -483,17 +511,14 @@ switch(icon){
                   
                                 </table> 
                                 
-                          </div>
-                           </div>
+                            </div>
+                        </div>
                    
-                          <div class="col-md-6" style="padding:0px;height:100%;">
-                               <img src="http://curiositysip.com/wp-content/uploads/2015/08/Sunflower-13.jpg" style="width:100%;height:100%;"></img>   
-                   
-                          </div>   
-                   
+                        <div class="col-md-6">
+                            <img src="http://curiositysip.com/wp-content/uploads/2015/08/Sunflower-13.jpg" style="width:100%;height:100%;"></img>   
+                        </div>   
                
-                     </div>
-               
+                    </div>
            </div>
        
           <div id="menu1" class="tab-pane fade">
@@ -507,11 +532,6 @@ switch(icon){
              <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
         </div>
         
-          <div id="menu3" class="tab-pane fade">
-            <h3>Menu 3</h3>
-            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-        
-          </div>
           
     </div>
             
