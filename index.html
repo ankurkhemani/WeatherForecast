@@ -5,14 +5,168 @@
 
 	<title>Weather Forecast</title>
 	<meta charset="utf-8" />
-    
+    <meta name="viewport" content="width=device-width" />
     <!-- Bootstrap -->
+    
+    
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+ 
+      
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     
      <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
-    <script src="http://openlayers.org/api/OpenLayers.js"></script>
+   
+ <script src="http://openlayers.org/api/OpenLayers.js"> </script>
+    <script src="http://openweathermap.org/js/OWM.OpenLayers.1.3.4.js" ></script>
+   
+   
+     <style>
+     
+         
+       body{    
+            
+            background: url("http://cs-server.usc.edu:45678/hw/hw8/images/bg.jpg") no-repeat center center fixed; 
+            background-size:cover;
+            -moz-background-size: cover;
+        }
+        
+        .main{
+            background: rgba(30,30,30,0.4);
+            color: white;
+            padding: 10px;
+        }
+        
+        
+        
+        h2#title{
+            padding-top: 0;
+            margin-top: 0;
+            color: black;
+        }
+        
+        .required{
+            color: red;
+            
+        }
+        
+        .requiredField{
+            color: red;
+            margin:3px;
+            padding: 0;
+            display: none;
+            font-size:85%;   
+        }
+        
+        #footer {
+ 	 	    width:100%;
+        }
+        
+        #myTab li a{
+            background-color:#EDEDED; 
+            color: #2F70A8;
+        
+        }
+        
+        #myTab li.active a{
+            background-color: #2F70A8;  
+            color: #EDEDED;
+            
+        }
+        
+        .topHeader {
+            background-color:#F27E7F; 
+            padding:20px;
+            margin:0px auto;
+        }
+        
+       
+        
+  
+          
+        .headerRow{
+            
+            background-color:#2F70A8; 
+            color:white;
+            font-weight:bold;   
+        }
+        
+        #dayDataTable{
+            background-color: #FDFDFD;   
+            text-align: center;
+        }
+        
+     .error {
+        color: red;
+}
+        
+        
+        
+        .table-striped>tbody>tr:nth-child(odd)>td,
+         .table-striped>tbody>tr:nth-child(odd)>th {
+	       background-color: #F9F9F9;    
+         }
+         
+        .table{
+             background: #F1DDDD;
+             margin:0;
+             padding:0;  
+        }
+       
+     
+        
+        .result{
+            padding-top: 10px;
+            padding-bottom: 20px;
+
+        }
+     
+        
+       .row.no-pad {
+           margin-right:0;
+           margin-left:0;
+
+                 }
+       .row.no-pad > [class*='col-'] {
+          padding-right:0;
+          padding-left:0;
+   
+}
+        .classWithPad { margin:7px 10px 7px 0px; padding:5px 0px 5px 0px; }
+         
+        .background1{
+
+         background-color: black;
+        }
+         
+        @media(max-width:991px){
+            .background1 {
+                    background-color: transparent;
+            }
+            
+            .classWithPad { margin:7px 0px 7px 0px; padding:5px 0px 5px 0px; }
+        }
+        
+      #menu2  #dailyData img{
+            width: 40px;
+            height: 40px;
+            
+        }
+        
+        #menu2 img{
+         width: 100px;
+        height: 100px;
+        }
+         
+         .collapse{
+             background-color: #E8E8E8;
+         }
+         
+         th{
+            text-align: center;
+         }
+        
+    </style>
     
      
     
@@ -22,6 +176,8 @@
 -->
     <script type="text/javascript">
         $("document").ready(function() {
+            
+          
             
                $("#inputForm").validate({
                   
@@ -48,10 +204,18 @@
                    city:"Please enter the city",
                    state:"Please select a state"       
                    },
-                  
+                   highlight: function (element) {
+            $(element).parent().addClass('error')
+        },
+        unhighlight: function (element) {
+            $(element).parent().removeClass('error')
+        },
                   
                  submitHandler:function(form)
                    {
+                       //Activate first tab
+                       activateTab('home');
+                       
                        var data={
                            'city1':$('input[name=city]').val(),
                            'address1':$('input[name=address]').val(),
@@ -133,53 +297,122 @@
    $('#weatherData').empty();
      $('#weatherIcon').empty();  
     $('#currentDataTable').empty();  
-        $('#dayDataTable').empty();                   
+        $('#dayDataTable').empty();  
+        $('#rightNowMap').empty();
+    
+                         
     switch(icon){
             
             case "clear-day": 
-                $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/clear.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;" ></img>');
+                var imageIcon1='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/clear.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\" ></img>';
+                $('#weatherIcon').append(imageIcon1);
                 break;
             case "clear-night": 
-                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;" ></img>');
+           var imageIcon1= '<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\" ></img>';
+                 $('#weatherIcon').append(imageIcon1);
                 break;
             case "rain": 
-                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/rain.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;"></img>');
+            var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/rain.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\"></img>';
+                 $('#weatherIcon').append(imageIcon1);
                 break;
             case "snow": 
-                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/snow.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;"></img>');
+            var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/snow.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\"></img>';
+                  $('#weatherIcon').append(imageIcon1);
                 break;
             case "sleet": 
-                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;"></img>');
+            var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\"></img>';
+                  $('#weatherIcon').append(imageIcon1);
                 break;
             case "wind": 
-                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/wind.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;" ></img>');
+             var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/wind.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\" ></img>';
+                  $('#weatherIcon').append(imageIcon1);
                 break;
             case "fog": 
-                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/fog.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;"></img>');
+            var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/fog.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\"></img>';
+                 $('#weatherIcon').append(imageIcon1);
                 break;
             case "cloudy": 
-                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;"></img>');
+            var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\"></img>';
+                 $('#weatherIcon').append(imageIcon1);
                 break;
             case "partly-cloudy-day": 
-                 $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png"  alt=icon  title=summary style="width:150px;height:150px;margin:auto;" ></img>');
+             var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\" ></img>';
+                 $('#weatherIcon').append(imageIcon1);
                 break;
             case "partly-cloudy-night": 
-                  $('#weatherIcon').append('<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png"  alt=icon  title=summary style="width:150px;height:40%;margin:auto;" ></img>');
+            var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\" ></img>';
+                  $('#weatherIcon').append(imageIcon1);
                 break;
                 
                 
         }
     
-      $('#weatherData').append('<p  style="color:white;font-size:95%;" align="center">'+summary+'&nbsp;in&nbsp;'+$('input[name=city]').val()+','+$('#state :selected').text()+'<h1 style="color:white;" align="center">'+ Math.round(temperature)+'<sup style="color:white;">o'+unit+'</sup>&nbsp;</h1><br><p style="color:#3D1FDD" align="center">L:&nbsp;'+ response["daily"]["data"][0]["temperatureMin"] +'<sup>o</sup><span  style="color:#4D7E28;">|H:&nbsp;'+ response["daily"]["data"][0]["temperatureMax"] +'<sup>o</sup></span></p><img src="http://cs-server.usc.edu:45678/hw/hw8/images/fb_icon.png" class="pull-right" title="Facebook Post" length="40" width="40">');                         
-                             
-                                               
-     $('#currentDataTable').append('<tr><td>Precipitation</td><td>'+precipitation+'</td></tr><tr><td>Chances of Rain</td><td>'+ chancesOfRain +'</td></tr><tr><td>Wind Speed</td><td>'+windspeed+'</td></tr><tr><td>Dew Point</td><td>'+dewpoint +'<sup>o</sup>'+unit+'</td></tr><tr><td>Humidity</td><td>'+humidity  +'%</td></tr><tr><td>Visibility</td><td>'+ visibility+'</td></tr><tr><td>Sunrise</td><td>'+timeFormatter(sunriseTime) +'</td></tr><tr><td>Sunset</td><td>'+timeFormatter(sunsetTime)+'</td></tr>');
+      $('#weatherData').append('<p  style="color:white;font-size:110%;font-weight:bold;" align="center">'+summary+'&nbsp;in&nbsp;'+$('input[name=city]').val()+', '+$('#state :selected').text()+'<h1 style="color:white;" align="center">'+ Math.round(temperature)+'<sup style="color:white;">o&nbsp;<h6 style="display:inline;">'+unit+'</h6></sup>&nbsp;</h1><br><p style="color:#3D1FDD" align="center">L:&nbsp;'+ response["daily"]["data"][0]["temperatureMin"] +'<sup>o</sup><span  style="color:#4D7E28;">&nbsp;|&nbsp;H:&nbsp;'+ response["daily"]["data"][0]["temperatureMax"] +'<sup>o</sup>&nbsp;&nbsp;<img id="fbIcon" src="http://cs-server.usc.edu:45678/hw/hw8/images/fb_icon.png"  style="width:30px;height:30px;"  class="pull-right"></img></span></p>');  
+     
+	
                            
-    $('#dayDataTable').append('<tr ><th style="background-color:#2F70A8;color:white;">Time</th><th style="background-color:#2F70A8;color:white;">Summary</th><th style="background-color:#2F70A8;color:white;">Cloud Cover</th><th style="background-color:#2F70A8;color:white;">Temp (&degF)</th><th style="background-color:#2F70A8;color:white;">View Details</th></tr>');
+$("#fbIcon").click(function() {
     
+         
+ var fbdesc = summary + ', ' + Math.round(temperature) + '\xB0'+unit;
+ var fbname="Current weather in "+$('input[name=city]').val()+", "+$('#state :selected').text();
+    var fbpicture="";
+     switch(icon)
+									{
+										case 'clear-day': fbpicture='http://cs-server.usc.edu:45678/hw/hw8/images/clear.png'; break;
+										case 'clear-night': fbpicture='http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png'; break;
+										case 'rain': fbpicture='http://cs-server.usc.edu:45678/hw/hw8/images/rain.png'; break;
+										case 'snow': fbpicture='http://cs-server.usc.edu:45678/hw/hw8/images/snow.png'; break;
+										case 'sleet': fbpicture='http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png'; break;
+										case 'wind': fbpicture='http://cs-server.usc.edu:45678/hw/hw8/images/wind.png'; break;
+										case 'fog':	fbpicture='http://cs-server.usc.edu:45678/hw/hw8/images/fog.png'; break;
+										case 'cloudy': fbpicture='http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png'; break;
+										case 'partly-cloudy-day': fbpicture='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png'; break;
+										case 'partly-cloudy-night':	fbpicture='http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png'; break;		 
+									}
+    
+   FB.ui(
+       			{ 
+              method: 'feed',
+			  redirect_uri: 'http://cs-server.usc.edu:52921/HW8/homework8.html',
+			  link: 'http://forecast.io/',
+			  picture: fbpicture,
+			  name: fbname,
+			  caption: 'WEATHER INFORMATION FROM FORECAST.IO',
+			  description: fbdesc
+       			  },
+       			  function(response){ 
+                      if (response && !response.error_message) {
+                            alert('Posted successfully');
+                                }
+                      else {
+                      alert('Not posted');
+    } });
+    
+});
+
+     $('#currentDataTable').append('<tr><td>Precipitation</td><td>'+precipitation+'</td></tr><tr><td>Chances of Rain</td><td>'+ chancesOfRain +'</td></tr><tr><td>Wind Speed</td><td>'+windspeed+'</td></tr><tr><td>Dew Point</td><td>'+dewpoint +'&nbsp;<sup>o</sup>'+unit+'</td></tr><tr><td>Humidity</td><td>'+humidity  +'%</td></tr><tr><td>Visibility</td><td>'+ visibility+'</td></tr><tr><td>Sunrise</td><td>'+timeFormatter(sunriseTime) +'</td></tr><tr><td>Sunset</td><td>'+timeFormatter(sunsetTime)+'</td></tr>');
+       
+    $('#rightNowMap').html('<div id="basicMap" style="height:100%;width:100%;border:2px white solid;"></div>'); 
+//     var width1=$('#currentDataColumn').width();
+//     var height1=$('#currentDataColumn').height();
+//     $('#basicMap').width(width1); 
+//     $('#basicMap').height(height1);                       
+    createMap(response.latitude, response.longitude);
+                           
+                           
+                           
+  
+                           
+ $('#dayDataTable').append('<tr ><th style="background-color:#2F70A8;color:white;">Time</th><th style="background-color:#2F70A8;color:white;">Summary</th><th style="background-color:#2F70A8;color:white;">Cloud Cover</th><th style="background-color:#2F70A8;color:white;">Temp (&deg'+unit+')</th><th style="background-color:#2F70A8;color:white;">View Details</th></tr>');
+    
+                           
+                          
+                           
   for(var i=0;i<25;i++)
   {
-switch(icon){
+      var icon1=response.hourly.data[i].icon;
+switch(icon1){
             
             case "clear-day": 
                 var imageIcon='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/clear.png"  alt=icon  title=summary style="width:40px;height:40px;" align="center" ></img>';
@@ -214,14 +447,141 @@ switch(icon){
         }                           
           
        
-       $('#dayDataTable').append('<tr><td>' + timeFormatter(response.hourly.data[i].time) + '</td><td>' + imageIcon + '</td><td>' + (response.hourly.data[i].cloudCover * 100).toFixed(0) + '%</td><td>' + response.hourly.data[i].temperature + '</td><td><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#viewDetail'+ i +'" aria-expanded="false" aria-controls="viewDetail'+ i +'" aria-hidden="true"></span></td></tr>');
+                                           var windspeed1=(response.hourly.data[i].windSpeed).toFixed(2);
+                                           var visibility1=(response.hourly.data[i].visibility).toFixed(2);
+                                           var  pressure1=(response.hourly.data[i].pressure);
       
- $('#dayDataTable').append('<tr class="collapse" id="viewDetail'+ i +'"><td colspan="5"><div class="table-responsive"><table class="table table-striped"><tr><th>Wind</th><th>Humidity</th><th>Visibility</th><th>Pressure</th></tr><tr><td>' + (response.hourly.data[i].windSpeed).toFixed(2) + 'mph</td><td>' + Math.round(response.hourly.data[i].humidity * 100) + '%</td><td>' + (response.hourly.data[i].visibility).toFixed(2) + 'mi</td><td>' + response.hourly.data[i].pressure + 'mb</td></tr>');
+       if(unit == "C")
+                                      {
+                                        windspeed1+=" m/s";
+                                        visibility1+=" Km";
+                                        pressure1+=" hPa";
+                                      }
+                                      else
+                                      {
+                                          windspeed1+=" mph";
+                                          visibility1+=" mi";
+                                          pressure1+=" mb";
+                                           
+                                      }  
+
+
+       
+       $('#dayDataTable').append('<tr><td>' + timeFormatter(response.hourly.data[i].time) + '</td><td>' + imageIcon + '</td><td>' + Math.round(response.hourly.data[i].cloudCover * 100) + '%</td><td>' + Math.round(response.hourly.data[i].temperature) + '</td><td><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#viewDetail'+ i +'" aria-expanded="false" aria-controls="viewDetail'+ i +'" aria-hidden="true"></span></td></tr>');
+      
+ $('#dayDataTable').append('<tr class="collapse" id="viewDetail'+ i +'" style="background-color:#E8E8E8;"><td colspan="5"><div class="table-responsive"><table class="table" style="background-color:#E8E8E8;><tr"><th style="background-color:white;">Wind</th><th style="background-color:white;">Humidity</th><th style="background-color:white";>Visibility</th><th style="background-color:white;">Pressure</th></tr><tr><td style="background-color:#E8E8E8;">' + windspeed1 + '</td><td style="background-color:#E8E8E8;">' + Math.round(response.hourly.data[i].humidity * 100) + '%</td><td style="background-color:#E8E8E8;">' + visibility1+ '</td><td style="background-color:#E8E8E8;">' + pressure1+'</td></tr></table></div>');
                                   
   }
-                               
+                          
+        
+      $('#dailyData').empty();                   
+    $('#dailyData').append(' <div class="col-md-2"></div>');
                            
-                       }
+                           var backgroundColors=["#357CB4","#EB4343","#E58D4E","#A6A338","#966FA6","#F27B7D","#CD4470"];
+for(var i=1;i<8;i++)
+  {
+      var day=response.daily.data[i].time; //convert to day
+      var monthDate=response.daily.data[i].time; //convert to month date
+      var icon2=response.daily.data[i].icon; 
+      var maxTemp=response.daily.data[i].temperatureMax;
+      var minTemp=response.daily.data[i].temperatureMin;
+      var summaryNew=response.daily.data[i].summary;
+      var humidityNew=response.daily.data[i].humidity;
+      var visibilityNew=response.daily.data[i].visibility;
+      var windspeedNew=response.daily.data[i].windSpeed;
+      var pressureNew=response.daily.data[i].pressure;
+      var sunsetTimeNew=response.daily.data[i].sunsetTime;
+      var sunriseTimeNew=response.daily.data[i].sunriseTime;
+      
+         if(unit == "C")
+                                      {
+                                        windspeedNew+=" m/s";
+                                        visibilityNew+=" Km";
+                                        pressureNew+=" hPa";
+                                      }
+                                      else
+                                      {
+                                          windspeedNew+=" mph";
+                                          visibilityNew+=" mi";
+                                          pressureNew+=" mb";
+                                           
+                                      }  
+      
+      
+switch(icon2){
+            
+            case "clear-day": 
+                var imageIcon='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/clear.png"  alt=icon  title=summary  align="center" ></img>';
+                break;
+            case "clear-night": 
+                var imageIcon='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png"  alt=icon  title=summary  align="center" ></img>';
+                break;
+            case "rain": 
+                 var imageIcon='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/rain.png"  alt=icon  title=summary  align="center" ></img>';
+                break;
+            case "snow": 
+                   var imageIcon='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/snow.png"  alt=icon  title=summary align="center" ></img>';
+                break;
+            case "sleet": 
+                  var imageIcon='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png"  alt=icon  title=summary align="center" ></img>';
+                break;
+            case "wind": 
+                   var imageIcon='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/wind.png"  alt=icon  title=summary  align="center" ></img>';
+                break;
+            case "fog": 
+                 var imageIcon='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/fog.png"  alt=icon  title=summary  align="center" ></img>';
+                break;
+            case "cloudy": 
+                 var imageIcon='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png"  alt=icon  title=summary  align="center" ></img>';
+                break;
+            case "partly-cloudy-day": 
+                 var imageIcon='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png"  alt=icon  title=summary  align="center" ></img>';
+                break;
+            case "partly-cloudy-night": 
+                  var imageIcon='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png"  alt=icon  title=summary  align="center" ></img>';
+                break;     
+        }  
+      
+   
+       $('#dailyData').append('<div class="col-md-1"  style="padding:0px;"><div class="classWithPad" style="background-color:'+backgroundColors[i-1]+';border-radius:8px;0px;" data-toggle="modal" data-target="#Next7days'+i+'Modal" id="Next7days'+i+'"></div></div>');
+      
+      
+      
+      
+      
+      $('#menu2').append('<div id="Next7days'+i+'Modal" class="modal" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span       ariahidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title" id="myModalTitle'+i+'"></h4></div><div class="modal-body" id="myModalBody'+i+'"style="text-align:center;"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div></div>');
+      
+      //create modal for that particular day
+      
+       //populate the modal
+      
+      
+       var id='#Next7days'+i;
+      
+      var idModalTitle='#myModalTitle'+i;
+      
+      var idModalBody='#myModalBody'+i;
+      $(idModalBody).empty();
+      $(idModalTitle).empty();
+
+      $(idModalTitle).append('Weather in '+$('input[name=city]').val()+'&nbsp;on&nbsp;'+getMonth(monthDate));
+      
+      
+      $(idModalBody).append(imageIcon+'<h2 align="center">'+getDay(day)+':'+'&nbsp;<span style="color:#FEA401;">'+summaryNew+'</span></h2><br><div class="row"><div class="col-md-4"><p style="font-weight:bold;">Sunrise Time</p><p>'+ timeFormatter(sunriseTimeNew)+'</p></div><div class="col-md-4"><p style="font-weight:bold;">Sunset Time</p>'+timeFormatter(sunsetTimeNew)+'<p></p></div><div class="col-md-4"><p style="font-weight:bold;">Humidity</p>'+Math.round(humidityNew*100)+'%<p></p></div></div><div class="row"><div class="col-md-4"><p style="font-weight:bold;">Wind Speed</p><p>'+windspeedNew+'</p></div><div class="col-md-4"><p style="font-weight:bold;">Visibility</p><p>'+visibilityNew+'</p></div><div class="col-md-4"><p style="font-weight:bold;">Pressure</p><p>'+pressureNew+'</p></div></div>');
+      
+      
+     
+      
+          
+      $(id).css("text-align","center");
+      $(id).css("color","white");
+      
+    $(id).append('<p style="text-align:center;font-weight:bold;">'+ getDay(day)+'</p><p>'+ getMonth(monthDate)+'</p><p>'+imageIcon+'</p><p>Min<br>Temp</p><h3>'+Math.round(minTemp)+'<sup>o</sup></h3><p>Max<br>Temp</p><h3>'+Math.round(maxTemp)+'<sup>o</sup></h3>');
+                                         
+  }
+                          $('#dailyData').append(' <div class="col-md-3"></div>');
+                             
+                              }
                        
                          });
                      return false;
@@ -232,6 +592,71 @@ switch(icon){
             
           
         });
+        
+        
+//         function faceBook(fbImage,name,desc){
+//            
+//             
+//       		FB.ui(
+//       			{ 
+//              method: 'feed',
+//			  link: 'http://forecast.io/',
+//			  picture: fbImage,
+//			  name: name,
+//			  caption: 'WEATHER INFORMATION FROM FORECAST.IO',
+//			  description: desc
+//       			  },
+//       			  function(response){ 
+//                      if (response && !response.error_message) {
+//                            alert('Posting completed.');
+//                                }
+//                      else {
+//                      alert('Error while posting.');
+//    } });}
+        
+        
+
+         function getDay(timestamp){
+
+                 var dates = new Date(timestamp*1000);   
+                 var weekday = new Array(7);
+                  weekday[0]=  "Sunday";
+                  weekday[1] = "Monday";
+                  weekday[2] = "Tuesday";
+                  weekday[3] = "Wednesday";
+                  weekday[4] = "Thursday";
+                  weekday[5] = "Friday";
+                  weekday[6] = "Saturday";
+
+                  var n = weekday[dates.getDay()];
+                 return n;                   
+                }
+     
+        
+        function getMonth(timestamp){
+            
+            var dates = new Date(timestamp*1000);
+            var month = new Array();
+               month[0] = "Jan";
+               month[1] = "Feb";
+               month[2] = "March";
+               month[3] = "Aprl";
+               month[4] = "May";
+               month[5] = "Jun";
+               month[6] = "Jul";
+               month[7] = "Aug";
+               month[8] = "Sept";
+               month[9] = "Oct";
+               month[10] = "Nov";
+               month[11] = "Dec";
+               var n = month[dates.getMonth()];
+               var d=dates.getDate();
+               var result= n+","+d;
+            return result;
+            
+            
+                 }
+        
          function timeFormatter(dateTime){
                         //multiply by 1000 to convert the unix timestamp to milliseconds
                         var date = new Date(dateTime * 1000);
@@ -248,6 +673,9 @@ switch(icon){
                         console.log(time);
                         return time;
                 }
+        
+      
+        
         
          var states=["Select your state...", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District Of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
 
@@ -273,129 +701,55 @@ switch(icon){
                  document.getElementById("Fahrenheit").checked=true; 
                   document.getElementById("Celsius").checked=false; 
                      document.getElementById("result").style.display="none";
+                 $('#inputForm').clearValidation();
+                 
              }
         
-
-
+      $.fn.clearValidation = function(){var v = $(this).validate();$('[name]',this).each(function(){v.successList.push(this);v.showErrors();});v.resetForm();v.reset();};
+        
+function createMap(lat, lon){
+    var map = new OpenLayers.Map("basicMap");
+			var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
+			var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
+			var position       = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
+			// Create overlays
+			//  OSM
+			var mapnik = new OpenLayers.Layer.OSM();
+			var layer_cloud = new OpenLayers.Layer.XYZ(
+								"clouds",
+								"http://${s}.tile.openweathermap.org/map/clouds/${z}/${x}/${y}.png",
+								{
+									isBaseLayer: false,
+									opacity: 0.7,
+									sphericalMercator: true
+								}
+							);
+			var layer_precipitation = new OpenLayers.Layer.XYZ(
+				"precipitation",
+				"http://${s}.tile.openweathermap.org/map/precipitation/${z}/${x}/${y}.png",
+				{
+					isBaseLayer: false,
+					opacity: 0.7,
+					sphericalMercator: true
+				}
+			);
+    
+    
+			map.addLayers([mapnik, layer_precipitation, layer_cloud]);
+			map.setCenter( position, 8 );
+ 
+            //map.tileManager.destroy();
+		}      
+        
+        
+        function activateTab(tab){
+            $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+        };
 
        
     </script>
     
-    <style>
-        
-        body{
-            
-            background: url("http://cs-server.usc.edu:45678/hw/hw8/images/bg.jpg") no-repeat center center fixed; 
-            background-size:cover;
-            -moz-background-size: cover;
-        }
-        
-        .main{
-            background: rgba(30,30,30,0.4);
-            color: white;
-            padding: 10px;
-        }
-        
-        
-        
-        h2#title{
-            padding-top: 0;
-            margin-top: 0;
-            color: black;
-        }
-        
-        .required{
-            color: red;
-            
-        }
-        
-        .requiredField{
-            color: red;
-            margin:3px;
-            padding: 0;
-            display: none;
-            font-size:85%;   
-        }
-        
-        #footer {
- 	 	    width:100%;
-        }
-        
-        #myTab li a{
-            background-color:#EDEDED; 
-            color: #2F70A8;
-        
-        }
-        
-        #myTab li.active a{
-            background-color: #2F70A8;  
-            color: #EDEDED;
-            
-        }
-        
-        .topHeader {
-            background-color:#F27E7F; 
-            padding:20px;
-            margin:0px auto;
-        }
-        
-        .center {
-            margin: auto;
-            width: 150px;
-        }
-        
-          
-        .headerRow{
-            
-            background-color:#2F70A8; 
-            color:white;
-            font-weight:bold;   
-        }
-        
-      
-        .table-striped>tbody>tr:nth-child(odd)>td,
-.table-striped>tbody>tr:nth-child(odd)>th {
-	       background-color: #F9F9F9;
-    
-}
-        .table{
-             background: #F1DDDD;
-             margin:0;
-             padding:0;  
-        }
-       
-        
-        /* To make columns of equal height */
-        .row-eq-height {
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: -ms-flexbox;
-            display:         flex;
-            padding:0;
-            margin:0;
-        }
-        
-        .result{
-            padding-top: 10px;
-            padding-bottom: 20px;
-
-        }
-        
-   .row.no-pad {
-  margin-right:0;
-  margin-left:0;
-}
-.row.no-pad > [class*='col-'] {
-  padding-right:0;
-  padding-left:0;
-}
-
-
-
-
-        
-    </style>
-    
+   
     
     
     
@@ -404,6 +758,26 @@ switch(icon){
 </head>
 
 <body>
+    
+    <script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '1507313969562832',
+      xfbml      : true,
+      version    : 'v2.5'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+            
+</script>
+            
   <div class="container">
     <div class="container label">
         
@@ -496,11 +870,11 @@ switch(icon){
       <div class="tab-content">
           
            <div id="home" class="tab-pane fade in active">
-                   <div class="row no-pad" >
+                   <div class="row no-pad">
                 
-                        <div class="col-md-6">
-                            <div class="row row-eq-height topHeader">
-                                <div class="col-md-6 center" id="weatherIcon">
+                        <div class="col-md-6" id="currentDataColumn">
+                            <div class="row topHeader">
+                                <div class="col-md-6" id="weatherIcon" style="text-align:center;">
                                 </div>
                                        
                                 <div class="col-md-6" id="weatherData">
@@ -514,22 +888,34 @@ switch(icon){
                             </div>
                         </div>
                    
-                        <div class="col-md-6">
-                            <img src="http://curiositysip.com/wp-content/uploads/2015/08/Sunflower-13.jpg" style="width:100%;height:100%;"></img>   
+                        <div class="col-md-6" >
+                            <div id="rightNowMap" style="height:500px;width:100%;"></div>
+                            
+                               
                         </div>   
                
                     </div>
            </div>
        
           <div id="menu1" class="tab-pane fade">
-             <table class="table table-striped " id="dayDataTable">
+              
                   
-            </table> 
+                    <table class="table table-striped " id="dayDataTable">
+                  
+            </table>
+            
+            
           </div>
         
-          <div id="menu2" class="tab-pane fade">
-             <h3>Menu 2</h3>
-             <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+          <div id="menu2" class="tab-pane fade background1" >
+           
+             <div class="container">
+              <div class="row"  id="dailyData">
+
+                      </div>
+                     
+                   </div>
+           
         </div>
         
           
@@ -542,3 +928,8 @@ switch(icon){
 </body>
 
 </html>
+
+    
+
+                  
+                  
