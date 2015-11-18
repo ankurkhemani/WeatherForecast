@@ -5,30 +5,22 @@
 
 	<title>Weather Forecast</title>
 	<meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <!-- Bootstrap -->
-    
-    
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
- 
-      
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    
-     <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
-   
- <script src="http://openlayers.org/api/OpenLayers.js"> </script>
+    <meta name="viewport" content="width=device-width" />   
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.13.0/jquery.validate.min.js"></script>
+    <script src="http://openlayers.org/api/OpenLayers.js"> </script>
     <script src="http://openweathermap.org/js/OWM.OpenLayers.1.3.4.js" ></script>
    
-   
-     <style>
+         <style>
      
          
-       body{    
+        body{    
             
             background: url("http://cs-server.usc.edu:45678/hw/hw8/images/bg.jpg") no-repeat center center fixed; 
             background-size:cover;
-            -moz-background-size: cover;
+           
         }
         
         .main{
@@ -79,10 +71,6 @@
             padding:20px;
             margin:0px auto;
         }
-        
-       
-        
-  
           
         .headerRow{
             
@@ -91,7 +79,7 @@
             font-weight:bold;   
         }
         
-        #dayDataTable{
+        #hourlyDataTable{
             background-color: #FDFDFD;   
             text-align: center;
         }
@@ -131,13 +119,22 @@
           padding-right:0;
           padding-left:0;
    
-}
+       }
         .classWithPad { margin:7px 10px 7px 0px; padding:5px 0px 5px 0px; }
+         
+         .borderRadius{
+            border-radius:8px;
+         }
          
         .background1{
 
          background-color: black;
         }
+            
+         .openMapInside{
+            style="border:2px white solid;"
+         } 
+             
          
         @media(max-width:991px){
             .background1 {
@@ -145,15 +142,20 @@
             }
             
             .classWithPad { margin:7px 0px 7px 0px; padding:5px 0px 5px 0px; }
+            
+            .borderRadius{
+                border-radius:30px;
+            }
         }
-        
-      #menu2  #dailyData img{
+         
+         
+      #next7DaysTAB  #dailyModal img{
             width: 40px;
             height: 40px;
             
         }
         
-        #menu2 img{
+        #next7DaysTAB img{
          width: 100px;
         height: 100px;
         }
@@ -214,7 +216,7 @@
                  submitHandler:function(form)
                    {
                        //Activate first tab
-                       activateTab('home');
+                       activateTab('rightNowTAB');
                        
                        var data={
                            'city1':$('input[name=city]').val(),
@@ -228,7 +230,7 @@
                        type: 'GET',
                        data:data,
                        datatype: 'json',
-                       url: "returnWeatherData.php",
+                       url: "http://weatherforecast.elasticbeanstalk.com",
                        success: function (weather_data){
                            var response=JSON.parse(weather_data);
                            console.log(response); 
@@ -242,17 +244,17 @@
                                    var unit="C";
                                     }
                                 var timezone=response["timezone"];
-                                var icon=response["currently"]["icon"];
-                                var summary=response["currently"]["summary"];
-                                var temperature=response["currently"]["temperature"];
-                                var dewpoint=response["currently"]["dewPoint"];
-                                var humidity=response["currently"]["humidity"];
-                                var windspeed=response["currently"]["windSpeed"];
-                                var visibility=response["currently"]["visibility"];
-                                var precipProbability=response["currently"]["precipProbability"];
+                                var icon=response["currently"]["icon"]?response["currently"]["icon"]:"N.A.";
+                                var summary=response["currently"]["summary"]?response["currently"]["summary"]:"N.A.";
+                                var temperature=response["currently"]["temperature"]?response["currently"]["temperature"]:"N.A.";
+                                var dewpoint=response["currently"]["dewPoint"]?response["currently"]["dewPoint"]:"N.A.";
+                                var humidity=response["currently"]["humidity"]?response["currently"]["humidity"]:"N.A.";
+                                var windspeed=response["currently"]["windSpeed"]?response["currently"]["windSpeed"]:"N.A.";
+                                var visibility=response["currently"]["visibility"]?response["currently"]["visibility"]:"N.A.";
+                                var precipProbability=response["currently"]["precipProbability"]?response["currently"]["precipProbability"]:"N.A.";
                                 var precipIntensity =response["currently"]["precipIntensity"];
-                                var sunsetTime=response["daily"]["data"][0]["sunsetTime"];
-                                var sunriseTime=response["daily"]["data"][0]["sunriseTime"];
+                                var sunsetTime=response["daily"]["data"][0]["sunsetTime"]?response["daily"]["data"][0]["sunsetTime"]:"N.A.";
+                                var sunriseTime=response["daily"]["data"][0]["sunriseTime"]?response["daily"]["data"][0]["sunriseTime"]:"N.A.";
                                 if(0 <= precipIntensity && precipIntensity < 0.002)
                                      {
                                        var precipitation="None";
@@ -278,76 +280,79 @@
                                      
                            if(unit == "C")
                                       {
-                                          windspeed+=" m/s";
-                                          visibility+=" Km";
+                                          if(windspeed!="N.A.")
+                                            windspeed+=" m/s";
+                                          if(visibility!="N.A.")
+                                            visibility+=" Km";
                                         //var  pressure+="hPa"
                                       }
                                       else
                                       {
-                                         
-                                         windspeed+=" mph";
-                                          visibility+=" mi";
+                                         if(windspeed!="N.A.")
+                                            windspeed+=" mph";
+                                          if(visibility!="N.A.")
+                                            visibility+=" mi";
                                          //var pressure+="mb";
                                       }  
  
                                    
     //use setcenter to set the zoom and location                       
      //adjust opacity of layers                      
-    $('#result').css("display","block");
-   $('#weatherData').empty();
-     $('#weatherIcon').empty();  
-    $('#currentDataTable').empty();  
-        $('#dayDataTable').empty();  
-        $('#rightNowMap').empty();
+        $('#result').css("display","block");
+        $('#rightNowData').html('');
+        $('#rightNowIcon').html('');  
+        $('#rightNowTable').html('');  
+        $('#hourlyDataTable').html('');  
+        $('#openMap').html('');
     
                          
     switch(icon){
             
             case "clear-day": 
                 var imageIcon1='<img src="http://cs-server.usc.edu:45678/hw/hw8/images/clear.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\" ></img>';
-                $('#weatherIcon').append(imageIcon1);
+                $('#rightNowIcon').append(imageIcon1);
                 break;
             case "clear-night": 
            var imageIcon1= '<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/clear_night.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\" ></img>';
-                 $('#weatherIcon').append(imageIcon1);
+                 $('#rightNowIcon').append(imageIcon1);
                 break;
             case "rain": 
             var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/rain.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\"></img>';
-                 $('#weatherIcon').append(imageIcon1);
+                 $('#rightNowIcon').append(imageIcon1);
                 break;
             case "snow": 
             var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/snow.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\"></img>';
-                  $('#weatherIcon').append(imageIcon1);
+                  $('#rightNowIcon').append(imageIcon1);
                 break;
             case "sleet": 
             var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/sleet.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\"></img>';
-                  $('#weatherIcon').append(imageIcon1);
+                  $('#rightNowIcon').append(imageIcon1);
                 break;
             case "wind": 
              var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/wind.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\" ></img>';
-                  $('#weatherIcon').append(imageIcon1);
+                  $('#rightNowIcon').append(imageIcon1);
                 break;
             case "fog": 
             var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/fog.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\"></img>';
-                 $('#weatherIcon').append(imageIcon1);
+                 $('#rightNowIcon').append(imageIcon1);
                 break;
             case "cloudy": 
             var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/cloudy.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\"></img>';
-                 $('#weatherIcon').append(imageIcon1);
+                 $('#rightNowIcon').append(imageIcon1);
                 break;
             case "partly-cloudy-day": 
              var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/cloud_day.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\" ></img>';
-                 $('#weatherIcon').append(imageIcon1);
+                 $('#rightNowIcon').append(imageIcon1);
                 break;
             case "partly-cloudy-night": 
             var imageIcon1='<img src=\"http://cs-server.usc.edu:45678/hw/hw8/images/cloud_night.png\"  alt=icon  title=summary style=\"width:120px;height:120px;margin:auto;\" ></img>';
-                  $('#weatherIcon').append(imageIcon1);
+                  $('#rightNowIcon').append(imageIcon1);
                 break;
                 
                 
         }
     
-      $('#weatherData').append('<p  style="color:white;font-size:110%;font-weight:bold;" align="center">'+summary+'&nbsp;in&nbsp;'+$('input[name=city]').val()+', '+$('#state :selected').text()+'<h1 style="color:white;" align="center">'+ Math.round(temperature)+'<sup style="color:white;">o&nbsp;<h6 style="display:inline;">'+unit+'</h6></sup>&nbsp;</h1><br><p style="color:#3D1FDD" align="center">L:&nbsp;'+ response["daily"]["data"][0]["temperatureMin"] +'<sup>o</sup><span  style="color:#4D7E28;">&nbsp;|&nbsp;H:&nbsp;'+ response["daily"]["data"][0]["temperatureMax"] +'<sup>o</sup>&nbsp;&nbsp;<img id="fbIcon" src="http://cs-server.usc.edu:45678/hw/hw8/images/fb_icon.png"  style="width:30px;height:30px;"  class="pull-right"></img></span></p>');  
+      $('#rightNowData').append('<p  style="color:white;font-size:110%;font-weight:bold;" align="center">'+summary+'&nbsp;in&nbsp;'+$('input[name=city]').val()+', '+$('#state :selected').val()+'<h1 style="color:white;" align="center">'+ Math.round(temperature)+'<sup style="color:white;">o&nbsp;<h6 style="display:inline;">'+unit+'</h6></sup>&nbsp;</h1><br><p style="color:#3D1FDD" align="center">L:&nbsp;'+ response["daily"]["data"][0]["temperatureMin"] +'<sup>o</sup><span  style="color:#4D7E28;">&nbsp;|&nbsp;H:&nbsp;'+ response["daily"]["data"][0]["temperatureMax"] +'<sup>o</sup>&nbsp;&nbsp;<img id="fbIcon" src="http://cs-server.usc.edu:45678/hw/hw8/images/fb_icon.png"  style="width:30px;height:30px;"  class="pull-right"></img></span></p>');  
      
 	
                            
@@ -391,20 +396,18 @@ $("#fbIcon").click(function() {
     
 });
 
-     $('#currentDataTable').append('<tr><td>Precipitation</td><td>'+precipitation+'</td></tr><tr><td>Chances of Rain</td><td>'+ chancesOfRain +'</td></tr><tr><td>Wind Speed</td><td>'+windspeed+'</td></tr><tr><td>Dew Point</td><td>'+dewpoint +'&nbsp;<sup>o</sup>'+unit+'</td></tr><tr><td>Humidity</td><td>'+humidity  +'%</td></tr><tr><td>Visibility</td><td>'+ visibility+'</td></tr><tr><td>Sunrise</td><td>'+timeFormatter(sunriseTime) +'</td></tr><tr><td>Sunset</td><td>'+timeFormatter(sunsetTime)+'</td></tr>');
+     $('#rightNowTable').append('<tr><td>Precipitation</td><td>'+precipitation+'</td></tr><tr><td>Chances of Rain</td><td>'+ chancesOfRain +'</td></tr><tr><td>Wind Speed</td><td>'+windspeed+'</td></tr><tr><td>Dew Point</td><td>'+dewpoint +'&nbsp;<sup>o</sup>'+unit+'</td></tr><tr><td>Humidity</td><td>'+humidity  +'%</td></tr><tr><td>Visibility</td><td>'+ visibility+'</td></tr><tr><td>Sunrise</td><td>'+sunriseTime +'</td></tr><tr><td>Sunset</td><td>'+sunsetTime+'</td></tr>');
        
-    $('#rightNowMap').html('<div id="basicMap" style="height:100%;width:100%;border:2px white solid;"></div>'); 
-//     var width1=$('#currentDataColumn').width();
-//     var height1=$('#currentDataColumn').height();
-//     $('#basicMap').width(width1); 
-//     $('#basicMap').height(height1);                       
-    createMap(response.latitude, response.longitude);
+    $('#openMap').html('<div id="openMapInside"></div>'); 
+     var height1=($('#currentDataColumn').height()-4);
+     $('#openMapInside').height(height1);                       
+     createMap(response.latitude, response.longitude);
                            
                            
                            
   
                            
- $('#dayDataTable').append('<tr ><th style="background-color:#2F70A8;color:white;">Time</th><th style="background-color:#2F70A8;color:white;">Summary</th><th style="background-color:#2F70A8;color:white;">Cloud Cover</th><th style="background-color:#2F70A8;color:white;">Temp (&deg'+unit+')</th><th style="background-color:#2F70A8;color:white;">View Details</th></tr>');
+ $('#hourlyDataTable').append('<tr ><th style="background-color:#2F70A8;color:white;">Time</th><th style="background-color:#2F70A8;color:white;">Summary</th><th style="background-color:#2F70A8;color:white;">Cloud Cover</th><th style="background-color:#2F70A8;color:white;">Temp (&deg'+unit+')</th><th style="background-color:#2F70A8;color:white;">View Details</th></tr>');
     
                            
                           
@@ -447,63 +450,75 @@ switch(icon1){
         }                           
           
        
-                                           var windspeed1=(response.hourly.data[i].windSpeed).toFixed(2);
-                                           var visibility1=(response.hourly.data[i].visibility).toFixed(2);
-                                           var  pressure1=(response.hourly.data[i].pressure);
+                                           var windspeed1=(response.hourly.data[i].windSpeed).toFixed(2)?(response.hourly.data[i].windSpeed).toFixed(2):"N.A.";
+                                           var visibility1=(response.hourly.data[i].visibility).toFixed(2)?(response.hourly.data[i].visibility).toFixed(2):"N.A.";
+                                           var  pressure1=(response.hourly.data[i].pressure)?(response.hourly.data[i].pressure):"N.A.";
       
        if(unit == "C")
                                       {
-                                        windspeed1+=" m/s";
-                                        visibility1+=" Km";
-                                        pressure1+=" hPa";
+                                        if(windspeed1!="N.A.")
+                                            windspeed1+=" m/s";
+                                        if(visibility1!="N.A.")
+                                            visibility1+=" Km";
+                                        if(pressure1!="N.A.")
+                                            pressure1+=" hPa";
                                       }
                                       else
                                       {
-                                          windspeed1+=" mph";
-                                          visibility1+=" mi";
-                                          pressure1+=" mb";
+                                          if(windspeed1!="N.A.")
+                                            windspeed1+=" mph";
+                                          if(visibility1!="N.A.")
+                                            visibility1+=" mi";
+                                          if(pressure1!="N.A.")
+                                            pressure1+=" mb";
                                            
                                       }  
 
 
        
-       $('#dayDataTable').append('<tr><td>' + timeFormatter(response.hourly.data[i].time) + '</td><td>' + imageIcon + '</td><td>' + Math.round(response.hourly.data[i].cloudCover * 100) + '%</td><td>' + Math.round(response.hourly.data[i].temperature) + '</td><td><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#viewDetail'+ i +'" aria-expanded="false" aria-controls="viewDetail'+ i +'" aria-hidden="true"></span></td></tr>');
+       $('#hourlyDataTable').append('<tr><td>' + response.hourly.data[i].time + '</td><td>' + imageIcon + '</td><td>' + Math.round(response.hourly.data[i].cloudCover * 100) + '%</td><td>' + Math.round(response.hourly.data[i].temperature) + '</td><td><span class="glyphicon glyphicon-plus" data-toggle="collapse" data-target="#viewDetail'+ i +'" aria-expanded="false" aria-controls="viewDetail'+ i +'" aria-hidden="true"></span></td></tr>');
       
- $('#dayDataTable').append('<tr class="collapse" id="viewDetail'+ i +'" style="background-color:#E8E8E8;"><td colspan="5"><div class="table-responsive"><table class="table" style="background-color:#E8E8E8;><tr"><th style="background-color:white;">Wind</th><th style="background-color:white;">Humidity</th><th style="background-color:white";>Visibility</th><th style="background-color:white;">Pressure</th></tr><tr><td style="background-color:#E8E8E8;">' + windspeed1 + '</td><td style="background-color:#E8E8E8;">' + Math.round(response.hourly.data[i].humidity * 100) + '%</td><td style="background-color:#E8E8E8;">' + visibility1+ '</td><td style="background-color:#E8E8E8;">' + pressure1+'</td></tr></table></div>');
+ $('#hourlyDataTable').append('<tr class="collapse" id="viewDetail'+ i +'" style="background-color:#E8E8E8;"><td colspan="5"><div class="table-responsive"><table class="table" style="background-color:#E8E8E8;><tr"><th style="background-color:white;">Wind</th><th style="background-color:white;">Humidity</th><th style="background-color:white";>Visibility</th><th style="background-color:white;">Pressure</th></tr><tr><td style="background-color:#E8E8E8;">' + windspeed1 + '</td><td style="background-color:#E8E8E8;">' + Math.round(response.hourly.data[i].humidity * 100) + '%</td><td style="background-color:#E8E8E8;">' + visibility1+ '</td><td style="background-color:#E8E8E8;">' + pressure1+'</td></tr></table></div>');
                                   
   }
                           
         
-      $('#dailyData').empty();                   
-    $('#dailyData').append(' <div class="col-md-2"></div>');
+      $('#dailyModal').empty();                   
+    $('#dailyModal').append(' <div class="col-md-2"></div>');
                            
                            var backgroundColors=["#357CB4","#EB4343","#E58D4E","#A6A338","#966FA6","#F27B7D","#CD4470"];
 for(var i=1;i<8;i++)
   {
-      var day=response.daily.data[i].time; //convert to day
-      var monthDate=response.daily.data[i].time; //convert to month date
-      var icon2=response.daily.data[i].icon; 
-      var maxTemp=response.daily.data[i].temperatureMax;
-      var minTemp=response.daily.data[i].temperatureMin;
-      var summaryNew=response.daily.data[i].summary;
-      var humidityNew=response.daily.data[i].humidity;
-      var visibilityNew=response.daily.data[i].visibility;
-      var windspeedNew=response.daily.data[i].windSpeed;
-      var pressureNew=response.daily.data[i].pressure;
-      var sunsetTimeNew=response.daily.data[i].sunsetTime;
-      var sunriseTimeNew=response.daily.data[i].sunriseTime;
-      
+      var day=response.daily.data[i].time?response.daily.data[i].time:"N.A."; //convert to day
+      var monthDate=response.daily.data[i].time?response.daily.data[i].time:"N.A."; //convert to month date
+      var icon2=response.daily.data[i].icon?response.daily.data[i].icon:"N.A."; 
+      var maxTemp=response.daily.data[i].temperatureMax?response.daily.data[i].temperatureMax:"N.A.";
+      var minTemp=response.daily.data[i].temperatureMin?response.daily.data[i].temperatureMin:"N.A.";
+      var summaryNew=response.daily.data[i].summary?response.daily.data[i].summary:"N.A.";
+      var humidityNew=response.daily.data[i].humidity?response.daily.data[i].humidity:"N.A.";
+      var visibilityNew=response.daily.data[i].visibility?response.daily.data[i].visibility:"N.A.";
+      var windspeedNew=response.daily.data[i].windSpeed?response.daily.data[i].windSpeed:"N.A.";
+      var pressureNew=response.daily.data[i].pressure?response.daily.data[i].pressure:"N.A.";
+      var sunsetTimeNew=response.daily.data[i].sunsetTime?response.daily.data[i].sunsetTime:"N.A.";
+      var sunriseTimeNew=response.daily.data[i].sunriseTime?response.daily.data[i].sunriseTime:"N.A.";
+ 
          if(unit == "C")
                                       {
-                                        windspeedNew+=" m/s";
-                                        visibilityNew+=" Km";
-                                        pressureNew+=" hPa";
+                                        if(windspeedNew!="N.A.")
+                                            windspeedNew+=" m/s";
+                                        if(visibilityNew!="N.A.")
+                                            visibilityNew+=" Km";
+                                        if(pressureNew!="N.A.")
+                                            pressureNew+=" hPa";
                                       }
                                       else
                                       {
-                                          windspeedNew+=" mph";
-                                          visibilityNew+=" mi";
-                                          pressureNew+=" mb";
+                                          if(windspeedNew!="N.A.")
+                                            windspeedNew+=" mph";
+                                          if(visibilityNew!="N.A.")
+                                            visibilityNew+=" mi";
+                                          if(pressureNew!="N.A.")
+                                            pressureNew+=" mb";
                                            
                                       }  
       
@@ -543,13 +558,13 @@ switch(icon2){
         }  
       
    
-       $('#dailyData').append('<div class="col-md-1"  style="padding:0px;"><div class="classWithPad" style="background-color:'+backgroundColors[i-1]+';border-radius:8px;0px;" data-toggle="modal" data-target="#Next7days'+i+'Modal" id="Next7days'+i+'"></div></div>');
+       $('#dailyModal').append('<div class="col-md-1" style="padding:0px;"><div class="classWithPad borderRadius" style="background-color:'+backgroundColors[i-1]+';" data-toggle="modal" data-target="#Next7days'+i+'Modal" id="Next7days'+i+'"></div></div>');
       
       
       
       
       
-      $('#menu2').append('<div id="Next7days'+i+'Modal" class="modal" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span       ariahidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title" id="myModalTitle'+i+'"></h4></div><div class="modal-body" id="myModalBody'+i+'"style="text-align:center;"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div></div>');
+      $('#next7DaysTAB').append('<div id="Next7days'+i+'Modal" class="modal" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal"><span       ariahidden="true">&times;</span><span class="sr-only">Close</span></button><h4 class="modal-title" id="myModalTitle'+i+'"></h4></div><div class="modal-body" id="myModalBody'+i+'"style="text-align:center;"></div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div></div>');
       
       //create modal for that particular day
       
@@ -567,7 +582,7 @@ switch(icon2){
       $(idModalTitle).append('Weather in '+$('input[name=city]').val()+'&nbsp;on&nbsp;'+getMonth(monthDate));
       
       
-      $(idModalBody).append(imageIcon+'<h2 align="center">'+getDay(day)+':'+'&nbsp;<span style="color:#FEA401;">'+summaryNew+'</span></h2><br><div class="row"><div class="col-md-4"><p style="font-weight:bold;">Sunrise Time</p><p>'+ timeFormatter(sunriseTimeNew)+'</p></div><div class="col-md-4"><p style="font-weight:bold;">Sunset Time</p>'+timeFormatter(sunsetTimeNew)+'<p></p></div><div class="col-md-4"><p style="font-weight:bold;">Humidity</p>'+Math.round(humidityNew*100)+'%<p></p></div></div><div class="row"><div class="col-md-4"><p style="font-weight:bold;">Wind Speed</p><p>'+windspeedNew+'</p></div><div class="col-md-4"><p style="font-weight:bold;">Visibility</p><p>'+visibilityNew+'</p></div><div class="col-md-4"><p style="font-weight:bold;">Pressure</p><p>'+pressureNew+'</p></div></div>');
+      $(idModalBody).append(imageIcon+'<h2 align="center">'+getDay(day)+':'+'&nbsp;<span style="color:#FEA401;">'+summaryNew+'</span></h2><br><div class="row"><div class="col-md-4"><p style="font-weight:bold;">Sunrise Time</p><p>'+ sunriseTimeNew+'</p></div><div class="col-md-4"><p style="font-weight:bold;">Sunset Time</p>'+sunsetTimeNew+'<p></p></div><div class="col-md-4"><p style="font-weight:bold;">Humidity</p>'+Math.round(humidityNew*100)+'%<p></p></div></div><div class="row"><div class="col-md-4"><p style="font-weight:bold;">Wind Speed</p><p>'+windspeedNew+'</p></div><div class="col-md-4"><p style="font-weight:bold;">Visibility</p><p>'+visibilityNew+'</p></div><div class="col-md-4"><p style="font-weight:bold;">Pressure</p><p>'+pressureNew+'</p></div></div>');
       
       
      
@@ -579,7 +594,7 @@ switch(icon2){
     $(id).append('<p style="text-align:center;font-weight:bold;">'+ getDay(day)+'</p><p>'+ getMonth(monthDate)+'</p><p>'+imageIcon+'</p><p>Min<br>Temp</p><h3>'+Math.round(minTemp)+'<sup>o</sup></h3><p>Max<br>Temp</p><h3>'+Math.round(maxTemp)+'<sup>o</sup></h3>');
                                          
   }
-                          $('#dailyData').append(' <div class="col-md-3"></div>');
+                          $('#dailyModal').append(' <div class="col-md-3"></div>');
                              
                               }
                        
@@ -592,46 +607,6 @@ switch(icon2){
             
           
         });
-        
-        
-//         function faceBook(fbImage,name,desc){
-//            
-//             
-//       		FB.ui(
-//       			{ 
-//              method: 'feed',
-//			  link: 'http://forecast.io/',
-//			  picture: fbImage,
-//			  name: name,
-//			  caption: 'WEATHER INFORMATION FROM FORECAST.IO',
-//			  description: desc
-//       			  },
-//       			  function(response){ 
-//                      if (response && !response.error_message) {
-//                            alert('Posting completed.');
-//                                }
-//                      else {
-//                      alert('Error while posting.');
-//    } });}
-        
-        
-
-         function getDay(timestamp){
-
-                 var dates = new Date(timestamp*1000);   
-                 var weekday = new Array(7);
-                  weekday[0]=  "Sunday";
-                  weekday[1] = "Monday";
-                  weekday[2] = "Tuesday";
-                  weekday[3] = "Wednesday";
-                  weekday[4] = "Thursday";
-                  weekday[5] = "Friday";
-                  weekday[6] = "Saturday";
-
-                  var n = weekday[dates.getDay()];
-                 return n;                   
-                }
-     
         
         function getMonth(timestamp){
             
@@ -657,24 +632,22 @@ switch(icon2){
             
                  }
         
-         function timeFormatter(dateTime){
-                        //multiply by 1000 to convert the unix timestamp to milliseconds
-                        var date = new Date(dateTime * 1000);
-                        if (date.getHours()>=12){
-                                var hour = parseInt(date.getHours()) - 12;
-                                hour = (hour == '0' ? 12 : hour);
-                                var amPm = "PM";
-                        } else {
-                                var hour = date.getHours();
-                                hour = (hour == '0' ? 12 : hour);
-                                var amPm = "AM";
-                        }
-                        var time = (hour < 10 ? '0'+hour : hour)   + ":" + (date.getMinutes() < 10 ? '0'+ date.getMinutes() : date.getMinutes()) + " " + amPm;
-                        console.log(time);
-                        return time;
+
+         function getDay(timestamp){
+
+                 var dates = new Date(timestamp*1000);   
+                 var weekday = new Array(7);
+                  weekday[0]=  "Sunday";
+                  weekday[1] = "Monday";
+                  weekday[2] = "Tuesday";
+                  weekday[3] = "Wednesday";
+                  weekday[4] = "Thursday";
+                  weekday[5] = "Friday";
+                  weekday[6] = "Saturday";
+
+                  var n = weekday[dates.getDay()];
+                 return n;                   
                 }
-        
-      
         
         
          var states=["Select your state...", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District Of Columbia", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
@@ -708,7 +681,7 @@ switch(icon2){
       $.fn.clearValidation = function(){var v = $(this).validate();$('[name]',this).each(function(){v.successList.push(this);v.showErrors();});v.resetForm();v.reset();};
         
 function createMap(lat, lon){
-    var map = new OpenLayers.Map("basicMap");
+    var map = new OpenLayers.Map("openMapInside");
 			var fromProjection = new OpenLayers.Projection("EPSG:4326");   // Transform from WGS 1984
 			var toProjection   = new OpenLayers.Projection("EPSG:900913"); // to Spherical Mercator Projection
 			var position       = new OpenLayers.LonLat(lon, lat).transform( fromProjection, toProjection);
@@ -739,6 +712,13 @@ function createMap(lat, lon){
 			map.setCenter( position, 8 );
  
             //map.tileManager.destroy();
+    
+            OpenLayers.Util.onImageLoadError = function(){
+            this.src = "";
+            this.alt = "Map unavailable";
+            this.title = "Map Unavailable"
+            };
+    
 		}      
         
         
@@ -762,7 +742,7 @@ function createMap(lat, lon){
     <script>
   window.fbAsyncInit = function() {
     FB.init({
-      appId      : '1507313969562832',
+      appId      : '499652023529496',
       xfbml      : true,
       version    : 'v2.5'
     });
@@ -862,26 +842,26 @@ function createMap(lat, lon){
     <div class="result" id="result" style="display:none;">
 
       <ul class="nav nav-tabs " id="myTab">
-        <li class="active"><a data-toggle="tab" href="#home">Right Now</a></li>
-        <li><a data-toggle="tab" href="#menu1">Next 24 Hours</a></li>
-        <li><a data-toggle="tab" href="#menu2">Next 7 Days</a></li>
+        <li class="active"><a data-toggle="tab" href="#rightNowTAB">Right Now</a></li>
+        <li><a data-toggle="tab" href="#next24HoursTAB">Next 24 Hours</a></li>
+        <li><a data-toggle="tab" href="#next7DaysTAB">Next 7 Days</a></li>
       </ul>
 
       <div class="tab-content">
           
-           <div id="home" class="tab-pane fade in active">
+           <div id="rightNowTAB" class="tab-pane fade in active">
                    <div class="row no-pad">
                 
                         <div class="col-md-6" id="currentDataColumn">
                             <div class="row topHeader">
-                                <div class="col-md-6" id="weatherIcon" style="text-align:center;">
+                                <div class="col-md-6" id="rightNowIcon" style="text-align:center;">
                                 </div>
                                        
-                                <div class="col-md-6" id="weatherData">
+                                <div class="col-md-6" id="rightNowData">
                                 </div>
                             </div>
                             <div class="table-responsive">
-                               <table class="table table-striped table-bordered" id="currentDataTable">
+                               <table class="table table-striped table-bordered" id="rightNowTable">
                   
                                 </table> 
                                 
@@ -889,7 +869,7 @@ function createMap(lat, lon){
                         </div>
                    
                         <div class="col-md-6" >
-                            <div id="rightNowMap" style="height:500px;width:100%;"></div>
+                            <div id="openMap" ></div>
                             
                                
                         </div>   
@@ -897,20 +877,20 @@ function createMap(lat, lon){
                     </div>
            </div>
        
-          <div id="menu1" class="tab-pane fade">
+          <div id="next24HoursTAB" class="tab-pane fade">
               
-                  
-                    <table class="table table-striped " id="dayDataTable">
+
+                    <table class="table" id="hourlyDataTable">
                   
             </table>
             
             
           </div>
         
-          <div id="menu2" class="tab-pane fade background1" >
+          <div id="next7DaysTAB" class="tab-pane fade background1" >
            
-             <div class="container">
-              <div class="row"  id="dailyData">
+        <div class="container">
+                     <div class="row"  id="dailyModal">
 
                       </div>
                      

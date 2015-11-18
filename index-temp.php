@@ -1,18 +1,5 @@
 <?php
     header('Access-Control-Allow-Origin: *');
-	
-		 if (is_ajax()) {
-                 test_function();
-                     }
-                                                                          
- 
-//Function to check if the request is an AJAX request
-function is_ajax() {
-  return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
-}
-
-
-function test_function(){
     
     if($_GET["unit1"] == "si")
      $unit="si";
@@ -35,12 +22,41 @@ function test_function(){
 
          if($lat && $long)
          {
-         $urlFa="https://api.forecast.io/forecast/01f5252f70291f9066491f595975ab0b/$lat,$long?";
-         $urlFb="units=$unit&exclude=flags";
-         $foreCastApiUrl=$urlFa.$urlFb;
-         $json = file_get_contents($foreCastApiUrl);
-         echo $json;    
+             $urlFa="https://api.forecast.io/forecast/01f5252f70291f9066491f595975ab0b/$lat,$long?";
+             $urlFb="units=$unit&exclude=flags";
+             $foreCastApiUrl=$urlFa.$urlFb;
+             
+             $json = file_get_contents($foreCastApiUrl);
+             $obj = json_decode($json);
+
+             date_default_timezone_set($obj->timezone);
+
+                for ( $i = 0; $i <= 7; $i++)
+
+                {
+
+                    $riseTime = $obj->daily->data[$i]->sunriseTime;
+
+                    $setTime = $obj->daily->data[$i]->sunsetTime;
+
+                    $obj->daily->data[$i]->sunriseTime = date('h:i A', $riseTime);
+
+                    $obj->daily->data[$i]->sunsetTime = date('h:i A', $setTime);
+                    
+                    $time = $obj->daily->data[$i]->time;
+                    $obj->daily->data[$i]->time = $time;
+
+
+                }
+             
+             for($i=0;$i<=48;$i++)
+            {
+                $time = $obj->hourly->data[$i]->time;
+                $obj->hourly->data[$i]->time = date('h:i A', $time);
+            }
+             
+             echo json_encode($obj);
         }
     
-}
+
 ?>
