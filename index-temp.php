@@ -1,6 +1,6 @@
 <?php
     header('Access-Control-Allow-Origin: *');
-    
+
     if($_GET["unit1"] == "si")
      $unit="si";
      else
@@ -44,7 +44,8 @@
                     $obj->daily->data[$i]->sunsetTime = date('h:i A', $setTime);
                     
                     $time = $obj->daily->data[$i]->time;
-                    $obj->daily->data[$i]->time = $time;
+                    $obj->daily->data[$i]->{'today'} = date("M j", $time);
+                    $obj->daily->data[$i]->{'day'} = date("l", $time);
 
 
                 }
