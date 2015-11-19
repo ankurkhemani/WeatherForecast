@@ -1,4 +1,4 @@
-package com.example.ankur.weatherforecast_android;
+package com.example.ankur.weather;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

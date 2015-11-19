@@ -3,9 +3,238 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@drawable/bg"
+    tools:context=".MainActivity">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView android:text="Forecast Search"
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        android:layout_centerHorizontal="true"
+        />
+
+    <RelativeLayout
+        android:id="@+id/streetRL"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/title">
+
+
+
+        <TextView android:text="Street"
+            android:id="@+id/street"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            />
+
+        <EditText
+            android:id="@+id/streetEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/street"
+            android:hint="Please enter street .. "
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/cityRL"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/streetRL">
+
+
+
+        <TextView android:text="City"
+            android:id="@+id/city"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            />
+
+        <EditText
+            android:id="@+id/cityEditText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/city"
+            android:hint="Please enter city .. "
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/stateRL"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/cityRL">
+
+
+
+        <TextView android:text="State"
+            android:id="@+id/state"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            />
+
+        <Spinner
+            android:id="@+id/stateSpinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/state"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/degreeRL"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/stateRL">
+
+
+
+        <TextView android:text="Degree"
+            android:id="@+id/degree"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textColor="@android:color/black"
+            android:textSize="18sp"
+            />
+
+        <RadioGroup
+            android:id="@+id/degreeRG"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/degree"
+            android:orientation="horizontal"
+            >
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fahrenheit"
+                android:textColor="@android:color/black"
+                android:checked="true"
+                android:text="Fahrenheit"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/celsius"
+                android:textColor="@android:color/black"
+                android:text="Celsius"/>
+
+
+        </RadioGroup>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/buttonRL"
+        android:layout_width="match_parent"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/degreeRL">
+
+
+
+        <Button
+            android:id="@+id/search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SEARCH"
+            />
+
+        <Button
+            android:id="@+id/clear"
+            android:layout_width="wrap_content"
+            android:layout_toRightOf="@+id/search"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:text="CLEAR"
+            />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonRL"
+        android:layout_marginTop="5dp"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="24sp"
+        android:text=""
+        android:id="@+id/error"
+        android:layout_centerHorizontal="true"
+        />
+
+    <RelativeLayout
+        android:id="@+id/footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        >
+
+
+
+        <Button
+            android:id="@+id/about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ABOUT"
+            />
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Powered By:"
+                android:textColor="@android:color/black"
+                />
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="150dp"
+                android:layout_height="70dp"
+                android:src="@drawable/forecast_logo"
+                />
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>
