@@ -15,39 +15,45 @@
         android:layout_marginTop="10dp"
         >
 
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content">
 
+            <Button
+                android:id="@+id/moreDetails"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MORE DETAILS"/>
 
-    <Button
-        android:id="@+id/moreDetails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MORE DETAILS"/>
+            <Button
+                android:id="@+id/viewMap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/moreDetails"
+                android:layout_marginLeft="10dp"
+                android:text="VIEW MAP"/>
 
-    <Button
-        android:id="@+id/viewMap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/moreDetails"
-        android:layout_marginLeft="10dp"
-        android:text="VIEW MAP"/>
+            <Button
+                android:id="@+id/fb"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_toRightOf="@+id/viewMap"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/fb_icon"
+                />
 
-    <Button
-        android:id="@+id/fb"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_toRightOf="@+id/viewMap"
-        android:layout_marginLeft="20dp"
-        android:background="@drawable/fb_icon"
-        />
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/icon"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_below="@+id/fb"
+            android:layout_below="@+id/header"
             android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/fb_icon"
+            android:src="@drawable/clear"
             />
 
         <TextView
@@ -70,9 +76,245 @@
             android:layout_below="@id/summary"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="30dp"
-            android:textSize="30sp"
+            android:textSize="38sp"
+            android:textStyle="bold"
             android:textColor="#838383"
             />
+
+        <TextView
+            android:id="@+id/lowHigh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text= "50"
+            android:layout_below="@id/temp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:textSize="24sp"
+            android:textColor="#838383"
+            />
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/lowHigh"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "Precipitation"
+                    android:textSize="22sp"
+                    android:layout_gravity="left"
+                    android:textColor="#838383"
+                    android:layout_weight="4"
+                    />
+
+                <TextView
+                    android:id="@+id/precipitation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "None"
+                    android:textSize="22sp"
+                    android:layout_gravity="right"
+                    android:textColor="#838383"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    />
+
+            </TableRow>
+
+
+            <TableRow android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "Chance Of Rain"
+                    android:textSize="22sp"
+                    android:layout_gravity="left"
+                    android:textColor="#838383"
+                    android:layout_weight="4"
+                    />
+
+                <TextView
+                    android:id="@+id/cofrain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "None"
+                    android:textSize="22sp"
+                    android:layout_gravity="right"
+                    android:textColor="#838383"
+                    android:layout_weight="1"
+                    android:gravity="right"
+
+                    />
+
+            </TableRow>
+
+            <TableRow android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "Wind Speed"
+                    android:textSize="22sp"
+                    android:layout_gravity="left"
+                    android:textColor="#838383"
+                    android:layout_weight="4"
+                    />
+
+                <TextView
+                    android:id="@+id/windSpeed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "None"
+                    android:textSize="22sp"
+                    android:layout_gravity="right"
+                    android:textColor="#838383"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    />
+
+            </TableRow>
+
+            <TableRow android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "Dew Point"
+                    android:textSize="22sp"
+                    android:layout_gravity="left"
+                    android:textColor="#838383"
+                    android:layout_weight="4"
+                    />
+
+                <TextView
+                    android:id="@+id/dewPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "None"
+                    android:textSize="22sp"
+                    android:layout_gravity="right"
+                    android:textColor="#838383"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    />
+
+            </TableRow>
+
+            <TableRow android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "Humidity"
+                    android:textSize="22sp"
+                    android:layout_gravity="left"
+                    android:textColor="#838383"
+                    android:layout_weight="4"
+                    />
+
+                <TextView
+                    android:id="@+id/humidity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "None"
+                    android:textSize="22sp"
+                    android:layout_gravity="right"
+                    android:textColor="#838383"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    />
+
+            </TableRow>
+
+            <TableRow android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "Visibility"
+                    android:textSize="22sp"
+                    android:layout_gravity="left"
+                    android:textColor="#838383"
+                    android:layout_weight="4"
+                    />
+
+                <TextView
+                    android:id="@+id/visibility"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "None"
+                    android:textSize="22sp"
+                    android:layout_gravity="right"
+                    android:textColor="#838383"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    />
+
+            </TableRow>
+
+            <TableRow android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "Sunrise"
+                    android:textSize="22sp"
+                    android:layout_gravity="left"
+                    android:textColor="#838383"
+                    android:layout_weight="4"
+                    />
+
+                <TextView
+                    android:id="@+id/sunrise"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "None"
+                    android:textSize="22sp"
+                    android:layout_gravity="right"
+                    android:textColor="#838383"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    />
+
+            </TableRow>
+
+            <TableRow android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "Sunset"
+                    android:textSize="22sp"
+                    android:layout_gravity="left"
+                    android:textColor="#838383"
+                    android:layout_weight="4"
+                    />
+
+                <TextView
+                    android:id="@+id/sunset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text= "None"
+                    android:textSize="22sp"
+                    android:layout_gravity="right"
+                    android:textColor="#838383"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    />
+
+            </TableRow>
+
+
+
+        </TableLayout>
 
 
 

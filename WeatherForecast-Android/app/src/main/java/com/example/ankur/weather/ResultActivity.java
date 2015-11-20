@@ -2,29 +2,50 @@ package com.example.ankur.weather;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ankur.weather.R;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookDialog;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ResultActivity extends Activity {
-    String jsonStr, unit, city, state; //Extras
+    private String jsonStr, unit, city, state; //Extras
 
     //TextViews
-    TextView tempTV, summaryTV;
+    private TextView tempTV, summaryTV, lowHighTV, precipitationTV, cofrainTV, windSpeedTV, dewPointTV, humidityTV, visibilityTV,
+    sunriseTV, sunsetTV;
+    private ImageView iconIV;
 
     // parsed from JSON
-    String summary, temp, dewpoint, humidity, windspeed, visibility, precipProbability, precipitation, sunsetTime, sunriseTime;
-    int precipIntensity;
+    private String icon, summary, temp, dewpoint, humidity, windspeed, visibility,
+            precipProbability, precipitation, sunsetTime, sunriseTime, tempMax, tempMin, chancesOfRain;
+    private int precipIntensity;
+    private int imageResourceID;
+    private Button moreDetails, viewMap, fbShare;
+
+    CallbackManager callbackManager;
+    ShareDialog shareDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,8 +58,6 @@ public class ResultActivity extends Activity {
 
         // initialize all widgets and other variables
         initializeObjects();
-        tempTV = (TextView) findViewById(R.id.temp);
-        summaryTV = (TextView) findViewById(R.id.summary);
 
         Log.d("Response: ", "> " + jsonStr);
 
@@ -51,11 +70,71 @@ public class ResultActivity extends Activity {
         }
 
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
+        shareDialog.registerCallback(callbackManager, shareCallBack);
 
+        fbShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (ShareDialog.canShow(ShareLinkContent.class)) {
+                    ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                            .setContentTitle("Current Weather in" + city + ", " + state)
+                            .setContentDescription(summary + ", " + Html.fromHtml(Math.round(Double.valueOf(temp)) + "<sup><small>" + (char) 0x00B0 + unit + "</small></sup>"))
+                            .setContentUrl(Uri.parse("http://forecast.io"))
+                            .setImageUrl(Uri.parse("http://cs-server.usc.edu:45678/hw/hw8/images/rain.png"))
+                            .build();
+
+                    shareDialog.show(linkContent);
+                }
+            }
+        });
+    }
+
+    public FacebookCallback<Sharer.Result> shareCallBack = new FacebookCallback<Sharer.Result>() {
+
+        @Override
+        public void onSuccess(Sharer.Result result) {
+            Toast.makeText(ResultActivity.this, "Facebook Post Successful", Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onCancel() {
+            Toast.makeText(ResultActivity.this, "Post Cancelled", Toast.LENGTH_SHORT).show();
+        }
+        @Override
+        public void onError(FacebookException error) {
+            Toast.makeText(ResultActivity.this, "Failed To Post", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     public void initializeObjects(){
 
+        //TextViews
+        tempTV = (TextView) findViewById(R.id.temp);
+        summaryTV = (TextView) findViewById(R.id.summary);
+        lowHighTV = (TextView) findViewById(R.id.lowHigh);
+        precipitationTV = (TextView) findViewById(R.id.precipitation);
+        cofrainTV = (TextView) findViewById(R.id.cofrain);
+        windSpeedTV = (TextView) findViewById(R.id.windSpeed);
+        dewPointTV = (TextView) findViewById(R.id.dewPoint);
+        humidityTV = (TextView) findViewById(R.id.humidity);
+        visibilityTV = (TextView) findViewById(R.id.visibility);
+        sunriseTV = (TextView) findViewById(R.id.sunrise);
+        sunsetTV = (TextView) findViewById(R.id.sunset);
+
+        //Imageview
+        iconIV = (ImageView) findViewById(R.id.icon);
+
+        //Buttons
+        fbShare = (Button) findViewById(R.id.fb);
     }
 
     public void parseJSON(String jsonStr, String unit){
@@ -64,21 +143,23 @@ public class ResultActivity extends Activity {
             try {
                 JSONObject jsonObj = new JSONObject(jsonStr);
                 // Getting JSON Array node
+                icon= jsonObj.getJSONObject("currently").getString("icon");
+
                 summary= jsonObj.getJSONObject("currently").getString("summary");
-                // display result
-                displayResult();
                 temp = jsonObj.getJSONObject("currently").getString("temperature");
-                dewpoint= jsonObj.getJSONObject("currently").getString("dewpoint");
+                dewpoint= jsonObj.getJSONObject("currently").getString("dewPoint");
                 humidity = jsonObj.getJSONObject("currently").getString("humidity");
-                windspeed= jsonObj.getJSONObject("currently").getString("windspeed");
+                windspeed= jsonObj.getJSONObject("currently").getString("windSpeed");
                 visibility = jsonObj.getJSONObject("currently").getString("visibility");
                 precipProbability = jsonObj.getJSONObject("currently").getString("precipProbability");
                 precipIntensity = Integer.parseInt(jsonObj.getJSONObject("currently").getString("precipIntensity"));
-                sunsetTime = jsonObj.getJSONObject("currently").getString("sunsetTime");
-                sunriseTime = jsonObj.getJSONObject("currently").getString("sunriseTime");
+                sunsetTime = jsonObj.getJSONObject("daily").getJSONArray("data").getJSONObject(0).getString("sunsetTime");
+                sunriseTime = jsonObj.getJSONObject("daily").getJSONArray("data").getJSONObject(0).getString("sunriseTime");
+                tempMax = jsonObj.getJSONObject("daily").getJSONArray("data").getJSONObject(0).getString("temperatureMax");
+                tempMin = jsonObj.getJSONObject("daily").getJSONArray("data").getJSONObject(0).getString("temperatureMin");
 
 
-
+                chancesOfRain=(precipIntensity*100)+"%";
 
                 if( precipIntensity >=0 && precipIntensity < 0.002)
                 {
@@ -102,7 +183,34 @@ public class ResultActivity extends Activity {
                     precipitation="Heavy";
                 }
 
+                if(unit.equals("C"))
+                {
+                        windspeed+=" m/s";
+                        visibility+=" Km";
+                }
+                else
+                {
+                        windspeed+=" mph";
+                        visibility+=" mi";
+                }
 
+
+                switch(icon){
+                    case "clear-day": imageResourceID = R.drawable.clear; break;
+                    case "clear-night": imageResourceID = R.drawable.clear_night; break;
+                    case "rain": imageResourceID = R.drawable.rain; break;
+                    case "snow": imageResourceID = R.drawable.snow; break;
+                    case "sleet": imageResourceID = R.drawable.sleet; break;
+                    case "wind": imageResourceID = R.drawable.wind; break;
+                    case "fog": imageResourceID = R.drawable.fog; break;
+                    case "cloudy": imageResourceID = R.drawable.cloudy; break;
+                    case "partly-cloudy-day": imageResourceID = R.drawable.cloud_day; break;
+                    case "partly-cloudy-night": imageResourceID = R.drawable.cloud_night; break;
+                }
+
+
+                // display result
+                displayResult();
 
             }
             catch (JSONException e) {
@@ -115,8 +223,18 @@ public class ResultActivity extends Activity {
     public void displayResult(){
 
         summaryTV.setText(summary + " in " + city + ", " + state);
-        tempTV.setText(Html.fromHtml(temp+ "<sup><small>" + (char) 0x00B0 + unit + "<small></sup>"));
-
+        tempTV.setText(Html.fromHtml(Math.round(Double.valueOf(temp)) + "<sup><small>" + (char) 0x00B0 + unit + "</small></sup>"));
+        iconIV.setImageResource(imageResourceID);
+        lowHighTV.setText(Html.fromHtml("L:" + tempMin + "<sup><small>" + (char) 0x00B0 + "</small></sup>" + " | " +
+                "H:" + tempMax + "<sup><small>" + (char) 0x00B0 + "</small></sup>"));
+        precipitationTV.setText(precipitation);
+        cofrainTV.setText(chancesOfRain);
+        windSpeedTV.setText(windspeed);
+        dewPointTV.setText(Html.fromHtml(dewpoint + " <sup><small>" + (char) 0x00B0 + "</small></sup>" + unit));
+        humidityTV.setText(humidity + "%");
+        visibilityTV.setText(visibility);
+        sunriseTV.setText(sunriseTime);
+        sunsetTV.setText(sunsetTime);
     }
 
     @Override

@@ -125,7 +125,8 @@ public class MainActivity extends Activity {
                     RadioButton radioButton = (RadioButton) findViewById(selectedId);
                     String degree = radioButton.getText().toString();
                     String unit = "";
-                    if(degree=="fahrenheit"){
+
+                    if(degree.equals("Fahrenheit")){
                         unit = "us";
                         unitShort = "F";
                     }
