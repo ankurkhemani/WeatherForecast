@@ -5,4 +5,5 @@
     <string name="action_settings">Settings</string>
     <string name="facebook_app_id">940614879358171</string>
     <string name="title_activity_user_profile">UserProfile</string>
+    <string name="title_activity_result">ResultActivity</string>
 </resources>

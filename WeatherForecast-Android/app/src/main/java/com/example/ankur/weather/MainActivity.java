@@ -48,6 +48,7 @@ public class MainActivity extends Activity {
     TextView errorMessage;
     Spinner spinner;
     ImageView logo;
+    String unitShort, city, state;
 
     private ProgressDialog pDialog;
 
@@ -111,8 +112,8 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
 
                 String street = streetET.getText().toString();
-                String city = cityET.getText().toString();
-                String state = spinner.getSelectedItem().toString();
+                city = cityET.getText().toString();
+                state = spinner.getSelectedItem().toString();
 
                 if(validate(street, city, state)) {
 
@@ -124,10 +125,14 @@ public class MainActivity extends Activity {
                     RadioButton radioButton = (RadioButton) findViewById(selectedId);
                     String degree = radioButton.getText().toString();
                     String unit = "";
-                    if(degree=="fahrenheit")
+                    if(degree=="fahrenheit"){
                         unit = "us";
-                    else
+                        unitShort = "F";
+                    }
+                    else {
                         unit = "si";
+                        unitShort = "C";
+                    }
 
                     Toast.makeText(MainActivity.this, street + " - " + city + " - " + state + " - " + unit
                             , Toast.LENGTH_SHORT).show();
@@ -220,7 +225,7 @@ public class MainActivity extends Activity {
     /**
      * Async task class to get json by making HTTP call
      * */
-    private class GetWeatherDataFromAWS extends AsyncTask<Void, Void, Void> {
+    private class GetWeatherDataFromAWS extends AsyncTask<Void, Void, String> {
         List<NameValuePair> params;
         public GetWeatherDataFromAWS(List<NameValuePair> params) {
             // do stuff
@@ -232,40 +237,25 @@ public class MainActivity extends Activity {
             super.onPreExecute();
             // Showing progress dialog
             pDialog = new ProgressDialog(MainActivity.this);
-            pDialog.setMessage("Please wait...");
+            pDialog.setMessage("Fetching weather ...");
             pDialog.setCancelable(false);
             pDialog.show();
 
         }
 
         @Override
-        protected Void doInBackground(Void... arg0) {
+        protected String doInBackground(Void... arg0) {
             // Creating service handler class instance
             ServiceHandler sh = new ServiceHandler();
 
             // Making a request to url and getting response
             String jsonStr = sh.makeServiceCall(url, ServiceHandler.GET, params);
 
-            Log.d("Response: ", "> " + jsonStr);
-
-            if (jsonStr != null) {
-                try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
-
-
-                    }
-                 catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Log.e("ServiceHandler", "Couldn't get any data from the url");
-            }
-
-            return null;
+            return jsonStr;
         }
 
         @Override
-        protected void onPostExecute(Void result) {
+        protected void onPostExecute(String result) {
             super.onPostExecute(result);
             // Dismiss the progress dialog
             if (pDialog.isShowing())
@@ -273,6 +263,20 @@ public class MainActivity extends Activity {
             /**
              * Updating parsed JSON data into ListView
              * */
+            if (result != null && !result.isEmpty()) {
+
+                Intent myIntent = new Intent(MainActivity.this, ResultActivity.class);
+                myIntent.putExtra("jsonStr", result);
+                myIntent.putExtra("unit", unitShort);
+                myIntent.putExtra("city", city);
+                myIntent.putExtra("state", state);
+                MainActivity.this.startActivity(myIntent);
+
+            } else {
+                Log.e("ServiceHandler", "Couldn't get any data from the url");
+                Toast.makeText(MainActivity.this, "Couldn't get any data from the url", Toast.LENGTH_SHORT).show();
+            }
+
 
         }
 
