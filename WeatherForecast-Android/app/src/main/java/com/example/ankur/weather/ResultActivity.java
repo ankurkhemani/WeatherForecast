@@ -28,6 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.xml.transform.Result;
+
 public class ResultActivity extends Activity {
     private String jsonStr, unit, city, state; //Extras
 
@@ -42,6 +44,7 @@ public class ResultActivity extends Activity {
     private int precipIntensity;
     private int imageResourceID;
     private Button moreDetails, viewMap, fbShare;
+    private String lat, lon;
 
     CallbackManager callbackManager;
     ShareDialog shareDialog;
@@ -81,7 +84,7 @@ public class ResultActivity extends Activity {
 
                 if (ShareDialog.canShow(ShareLinkContent.class)) {
                     ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                            .setContentTitle("Current Weather in" + city + ", " + state)
+                            .setContentTitle("Current Weather in " + city + ", " + state)
                             .setContentDescription(summary + ", " + Html.fromHtml(Math.round(Double.valueOf(temp)) + "<sup><small>" + (char) 0x00B0 + unit + "</small></sup>"))
                             .setContentUrl(Uri.parse("http://forecast.io"))
                             .setImageUrl(Uri.parse("http://cs-server.usc.edu:45678/hw/hw8/images/rain.png"))
@@ -89,6 +92,28 @@ public class ResultActivity extends Activity {
 
                     shareDialog.show(linkContent);
                 }
+            }
+        });
+
+        viewMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(ResultActivity.this, MapActivity.class);
+                myIntent.putExtra("lat", lat);
+                myIntent.putExtra("lon", lon);
+                ResultActivity.this.startActivity(myIntent);
+            }
+        });
+
+        moreDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(ResultActivity.this, DetailsActivity.class);
+                myIntent.putExtra("jsonStr", jsonStr);
+                myIntent.putExtra("unit", unit);
+                myIntent.putExtra("city", city);
+                myIntent.putExtra("state", state);
+                ResultActivity.this.startActivity(myIntent);
             }
         });
     }
@@ -135,6 +160,9 @@ public class ResultActivity extends Activity {
 
         //Buttons
         fbShare = (Button) findViewById(R.id.fb);
+        viewMap = (Button) findViewById(R.id.viewMap);
+        moreDetails = (Button) findViewById(R.id.moreDetails);
+
     }
 
     public void parseJSON(String jsonStr, String unit){
@@ -157,6 +185,9 @@ public class ResultActivity extends Activity {
                 sunriseTime = jsonObj.getJSONObject("daily").getJSONArray("data").getJSONObject(0).getString("sunriseTime");
                 tempMax = jsonObj.getJSONObject("daily").getJSONArray("data").getJSONObject(0).getString("temperatureMax");
                 tempMin = jsonObj.getJSONObject("daily").getJSONArray("data").getJSONObject(0).getString("temperatureMin");
+
+                lat= jsonObj.getString("latitude");
+                lon= jsonObj.getString("longitude");
 
 
                 chancesOfRain=(precipIntensity*100)+"%";

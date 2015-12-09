@@ -6,4 +6,9 @@
     <string name="facebook_app_id">940614879358171</string>
     <string name="title_activity_user_profile">UserProfile</string>
     <string name="title_activity_result">ResultActivity</string>
+    <string name="title_activity_map">MapActivity</string>
+
+    <string name="aeris_client_id">5r40OY2z6Eco8IM5guKoJ</string>
+    <string name="aeris_client_secret">yQKU3jgSX6pwyVQv5EudCJ1Z2OjoEHIkCIcBRqt7</string>
+    <string name="title_activity_details">DetailsActivity</string>
 </resources>
