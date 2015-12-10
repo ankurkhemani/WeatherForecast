@@ -136,8 +136,8 @@ public class MainActivity extends Activity {
                         unitShort = "C";
                     }
 
-                    Toast.makeText(MainActivity.this, street + " - " + city + " - " + state + " - " + unit
-                            , Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, street + " - " + city + " - " + state + " - " + unit
+                      //      , Toast.LENGTH_SHORT).show();
 
                     List<NameValuePair> params=new ArrayList<NameValuePair>();
                     params.add(new BasicNameValuePair("address1", street));

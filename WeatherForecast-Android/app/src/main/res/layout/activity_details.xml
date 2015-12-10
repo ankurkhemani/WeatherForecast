@@ -11,7 +11,8 @@
     <TextView
         android:id="@+id/title"
         android:text="More Details for Los Angeles, CA"
-        android:textSize="32sp"
+        android:textSize="28sp"
+        android:textColor="@android:color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -37,6 +38,7 @@
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="fill_parent"
+                android:layout_marginTop="10dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
         </LinearLayout>

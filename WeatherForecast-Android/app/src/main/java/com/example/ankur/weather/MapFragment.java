@@ -41,7 +41,7 @@ public class MapFragment extends MapViewFragment implements OnAerisMapLongClickL
 
         String lat = getArguments().getString("lat");
         String lon = getArguments().getString("lon");
-        Toast.makeText(getActivity(), lat + "  " + lon, Toast.LENGTH_LONG).show();
+//        Toast.makeText(getActivity(), lat + "  " + lon, Toast.LENGTH_LONG).show();
 //        Location location = new Location("");
 //        location.setLatitude(Double.valueOf(lat));
 //        location.setLongitude(Double.valueOf(lon));

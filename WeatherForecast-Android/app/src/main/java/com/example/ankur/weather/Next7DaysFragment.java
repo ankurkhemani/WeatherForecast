@@ -4,11 +4,19 @@ package com.example.ankur.weather;
  * Created by Ankur on 08/12/15.
  */
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,12 +31,17 @@ import com.hamweather.aeris.maps.interfaces.OnAerisMapLongClickListener;
 import com.hamweather.aeris.model.AerisResponse;
 import com.hamweather.aeris.tiles.AerisTile;
 
-import org.w3c.dom.Text;
+import org.w3c.dom.NodeList;
+
+import java.util.HashMap;
 
 // import the AerisMapView & components
 
 public class Next7DaysFragment extends Fragment
 {
+
+    ListViewAdapter_7Days adapter;
+    ListView list;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,9 +49,14 @@ public class Next7DaysFragment extends Fragment
 
 
 
-        String jsonStr = getArguments().getString("jsonStr");
-        String city = getArguments().getString("city");
+        final String jsonStr = getArguments().getString("jsonStr");
+        String unit = getArguments().getString("unit");
 
+        list=(ListView)view.findViewById(R.id.list);
+
+        // Getting adapter
+        adapter = new ListViewAdapter_7Days(getActivity(), jsonStr, 7, unit);
+        list.setAdapter(adapter);
 
         return view;
     }

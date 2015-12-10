@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/top"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+    <!-- List item name -->
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#5D5D5D"
+        android:textStyle="bold"
+        android:gravity="left"
+        android:layout_alignParentLeft="true"
+        android:text="date"
+        android:padding="5dip"
+        android:textSize="18sp">
+    </TextView>
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="30dp"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/snow"
+        android:paddingRight="5dp"
+        android:layout_height="30dp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/minMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#5D5D5D"
+        android:padding="10dip"
+        android:gravity="left"
+        android:layout_below="@+id/top"
+        android:text="temp"
+        android:textSize="18sp">
+    </TextView>
+</RelativeLayout>

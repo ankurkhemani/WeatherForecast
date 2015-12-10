@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <!-- List item name -->
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#5D5D5D"
+        android:textStyle="bold"
+        android:gravity="left"
+        android:layout_alignParentLeft="true"
+        android:text="Time"
+        android:padding="10dip"
+        android:textSize="16dp">
+    </TextView>
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/snow"
+        android:layout_height="30dp" />
+
+    <TextView
+        android:id="@+id/temp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#5D5D5D"
+        android:textStyle="bold"
+        android:padding="10dip"
+        android:gravity="right"
+        android:layout_alignParentRight="true"
+        android:text="temp"
+        android:textSize="16dp">
+    </TextView>
+</RelativeLayout>

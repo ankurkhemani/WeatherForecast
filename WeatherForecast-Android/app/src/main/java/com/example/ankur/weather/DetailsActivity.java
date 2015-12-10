@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 public class DetailsActivity extends FragmentActivity {
@@ -24,6 +27,8 @@ public class DetailsActivity extends FragmentActivity {
         bundle.putString("city", getIntent().getStringExtra("city"));
         bundle.putString("state", getIntent().getStringExtra("state"));
 
+        TextView title = (TextView) findViewById(R.id.title);
+        title.setText("More Details for " + getIntent().getStringExtra("city") + ", " + getIntent().getStringExtra("state"));
 
 
 
