@@ -139,12 +139,14 @@
                 android:id="@+id/fahrenheit"
                 android:textColor="@android:color/black"
                 android:checked="true"
+                android:buttonTint="@android:color/black"
                 android:text="Fahrenheit"/>
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/celsius"
                 android:textColor="@android:color/black"
+                android:buttonTint="@android:color/black"
                 android:text="Celsius"/>
 
 

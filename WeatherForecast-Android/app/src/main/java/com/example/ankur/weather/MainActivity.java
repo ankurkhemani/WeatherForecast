@@ -160,6 +160,7 @@ public class MainActivity extends Activity {
                 cityET.setText("");
                 spinner.setSelection(0);
                 degreeRG.check(R.id.fahrenheit);
+                errorMessage.setText("");
 
             }
         });
