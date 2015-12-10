@@ -41,7 +41,7 @@ public class ResultActivity extends Activity {
     // parsed from JSON
     private String icon, summary, temp, dewpoint, humidity, windspeed, visibility,
             precipProbability, precipitation, sunsetTime, sunriseTime, tempMax, tempMin, chancesOfRain;
-    private int precipIntensity;
+    private float precipIntensity;
     private int imageResourceID;
     private Button moreDetails, viewMap, fbShare;
     private String lat, lon;
@@ -95,7 +95,7 @@ public class ResultActivity extends Activity {
             }
         });
 
-        viewMap.setOnClickListener(new View.OnClickListener() {
+        viewMap.g(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(ResultActivity.this, MapActivity.class);
@@ -180,7 +180,7 @@ public class ResultActivity extends Activity {
                 windspeed= jsonObj.getJSONObject("currently").getString("windSpeed");
                 visibility = jsonObj.getJSONObject("currently").getString("visibility");
                 precipProbability = jsonObj.getJSONObject("currently").getString("precipProbability");
-                precipIntensity = Integer.parseInt(jsonObj.getJSONObject("currently").getString("precipIntensity"));
+                precipIntensity = Float.parseFloat(jsonObj.getJSONObject("currently").getString("precipIntensity"));
                 sunsetTime = jsonObj.getJSONObject("daily").getJSONArray("data").getJSONObject(0).getString("sunsetTime");
                 sunriseTime = jsonObj.getJSONObject("daily").getJSONArray("data").getJSONObject(0).getString("sunriseTime");
                 tempMax = jsonObj.getJSONObject("daily").getJSONArray("data").getJSONObject(0).getString("temperatureMax");
