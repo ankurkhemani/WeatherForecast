@@ -1,4 +1,5 @@
 WEATHER FORECAST WEB/ANDROID APP - Predicts weather after parsing the JSON returned by Google Geocode API and Forecast.io API
+This app is a part of assignment for CSCI571 under Prof. Marco Papa
 
 For the web version, used Facebook Login (JS), JQuery, Ajax, Amazon AWS and Bootstrap to create a responsive and user-friendly experience. It can be accessed here (dunno until when): http://cs-server.usc.edu:55937/WF-Ankur.html
 
